@@ -37,6 +37,11 @@ export interface TipjarOptions {
   compact?: Compact;
   /** Open the link in a new tab. Defaults to false. */
   newTab?: boolean;
+  /**
+   * With `newTab`, words read to screen readers after the label and description, so people know
+   * a tab will open. Defaults to "(opens in a new tab)"; translate it, or pass `''` for none.
+   */
+  newTabHint?: string;
   /** Inline colours and radius. Leave out on strict-CSP sites and use CSS. */
   look?: TipjarLook;
   /** More classes for the link. */
@@ -87,7 +92,9 @@ export function tipjar(options: TipjarOptions): string {
   const compact = oneOf('compact', options.compact ?? 'auto', COMPACTS);
   const classes = ['tipjar', ...(options.className ? options.className.split(/\s+/).filter(Boolean) : [])];
   const target = options.newTab ? ' target="_blank" rel="noopener"' : '';
-  const sr = options.description ? `<span class="tipjar-sr"> ${escapeHtml(options.description)}</span>` : '';
+  const hint = options.newTab ? (options.newTabHint ?? '(opens in a new tab)') : '';
+  const extra = [options.description, hint].filter(Boolean).join(' ');
+  const sr = extra ? `<span class="tipjar-sr"> ${escapeHtml(extra)}</span>` : '';
   const ico = iconMarkup(options.icon, options.iconStyle ?? 'flat');
   // With no icon there is nothing to fold to, so the label always shows.
   const fold = ico ? compact : 'never';

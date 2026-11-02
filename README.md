@@ -49,7 +49,8 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `iconStyle` | `"flat"` | `flat`, `pixel` or `outline`. |
 | `position` | `"bottom-right"` | `bottom-left`, `top-right`, `top-left`, or `inline` to flow with the page. |
 | `compact` | `"auto"` | When to show only the icon: `auto` (under 600px wide), `always` or `never`. |
-| `newTab` | `false` | Open the link in a new tab. |
+| `newTab` | `false` | Open the link in a new tab, with `rel="noopener"`. Screen readers hear the `newTabHint` after the label. |
+| `newTabHint` | `"(opens in a new tab)"` | With `newTab`, words read to screen readers so people know a tab will open. Translate it, or `''` for none. |
 | `look` | none | `{ background, label, icon, radius }` written as inline custom properties. Leave it out on strict-CSP sites. |
 | `className` | none | More classes for the link. |
 
@@ -72,6 +73,10 @@ untuck();
 A tucked button gets `data-tucked`, which hides it and takes it out of the tab order.
 
 `icon(name, style)` returns a single icon as an SVG string, and `ICON_NAMES` and `ICON_STYLES` list them.
+
+## Referrer
+
+The link doesn't add `rel="noreferrer"`, so Ko-fi, Buy Me a Coffee and the like can see which site a tip came from, which many people want. What they see follows your site's referrer policy; browsers default to sending only your origin (`https://you.dev/`), never the full page URL. To send nothing, set a `Referrer-Policy: no-referrer` header or `<meta name="referrer" content="no-referrer">` on your site.
 
 ## Theme it
 
