@@ -1,7 +1,9 @@
 /* tipjar: a floating tip button. Theme it with the --tipjar-* custom properties, on .tipjar or any ancestor. */
 .tipjar {
+  /* tipjar's own fallbacks. A --tipjar-* value set by the site always wins over them. */
   --_bg: var(--tipjar-bg, #1f1d2b);
   --_label: var(--tipjar-label, #ffffff);
+  --_ring: var(--tipjar-ring, #ffffff);
   position: fixed;
   z-index: var(--tipjar-z, 50);
   display: inline-flex;
@@ -22,7 +24,7 @@
   border-radius: var(--tipjar-radius, 999px);
   text-decoration: none;
   /* A ring of the page colour keeps the button readable over whatever scrolls beneath it. */
-  box-shadow: var(--tipjar-shadow, 0 0 0 2px var(--tipjar-ring, #ffffff), 0 8px 18px -8px rgb(0 0 0 / 0.5));
+  box-shadow: var(--tipjar-shadow, 0 0 0 2px var(--_ring), 0 8px 18px -8px rgb(0 0 0 / 0.5));
   transition:
     transform 0.15s,
     opacity 0.2s,
@@ -31,7 +33,20 @@
 }
 .tipjar:hover {
   color: var(--_label);
-  transform: translateY(-2px);
+}
+/* Lift on hover only where there is hover: on touch screens it would stick after a tap. */
+@media (hover: hover) {
+  .tipjar:hover {
+    transform: translateY(-2px);
+  }
+}
+/* On a dark page: a light button with a dark ring. Only the fallbacks change. */
+@media (prefers-color-scheme: dark) {
+  .tipjar {
+    --_bg: var(--tipjar-bg, #f4f1ea);
+    --_label: var(--tipjar-label, #1f1d2b);
+    --_ring: var(--tipjar-ring, #15141c);
+  }
 }
 .tipjar:focus-visible {
   outline: 2px solid var(--tipjar-focus, var(--_bg));
@@ -117,6 +132,19 @@
   .tipjar:hover,
   .tipjar[data-tucked] {
     transform: none;
+  }
+}
+/* Forced colours (Windows High Contrast) drop the fill and the ring: draw a border instead. */
+@media (forced-colors: active) {
+  .tipjar {
+    border: 2px solid LinkText;
+    color: LinkText;
+  }
+  .tipjar-icon {
+    color: LinkText;
+  }
+  .tipjar:focus-visible {
+    outline-color: Highlight;
   }
 }
 @media print {
