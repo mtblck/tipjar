@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`icon > keeps the drawings stable 1`] = `
+{
+  "coffee": [
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9h13v5a6 6 0 0 1-6 6H9a6 6 0 0 1-6-6V9zM16 10h1.5a3.5 3.5 0 0 1 0 7h-2.2l.8-2h1.4a1.5 1.5 0 0 0 0-3H16zM7 3.5a1 1 0 0 1 2 0v3a1 1 0 0 1-2 0zM11 2.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0zM2 21.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" shape-rendering="crispEdges"><path fill="currentColor" d="M3 0h1v1H3zM6 0h1v1H6zM2 1h1v1H2zM5 1h1v1H5zM3 2h1v1H3zM6 2h1v1H6zM0 3h9v1H0zM0 4h10v1H0zM0 5h9v1H0zM10 5h1v1H10zM0 6h9v1H0zM10 6h1v1H10zM0 7h10v1H0zM1 8h7v1H1zM2 9h5v1H2zM0 10h11v1H0z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1a3 3 0 0 1 0 6h-1.4M8 3v3M12 3v3M3 21.5h15"/></svg>",
+  ],
+  "gift": [
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M4 13h7v8H5a1 1 0 0 1-1-1zM13 13h7v7a1 1 0 0 1-1 1h-6zM3 8.5A1.5 1.5 0 0 1 4.5 7H11v4.5H3zM13 7h6.5A1.5 1.5 0 0 1 21 8.5v3h-8zM11 6.5C8.6 6.6 6 6 6 4.4 6 2.7 8.6 2.4 11 6.5zM13 6.5c2.4.1 5-.5 5-2.1 0-1.7-2.6-2-5 2.1z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" shape-rendering="crispEdges"><path fill="currentColor" d="M2 0h2v1H2zM8 0h2v1H8zM3 1h2v1H3zM7 1h2v1H7zM4 2h4v1H4zM0 3h5v1H0zM7 3h5v1H7zM0 4h5v1H0zM7 4h5v1H7zM1 6h4v1H1zM7 6h4v1H7zM1 7h4v1H1zM7 7h4v1H7zM1 8h4v1H1zM7 8h4v1H7zM1 9h4v1H1zM7 9h4v1H7zM1 10h4v1H1zM7 10h4v1H7z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8c-2.2 0-5-.6-5-2.5S9.6 2.8 12 8zM12 8c2.2 0 5-.6 5-2.5S14.4 2.8 12 8z"/></svg>",
+  ],
+  "heart": [
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M12 20.5s-8-4.9-10-10C.6 6.8 3.2 3.5 6.7 3.5c2.2 0 4 1.2 5.3 3 1.3-1.8 3.1-3 5.3-3 3.5 0 6.1 3.3 4.7 7-2 5.1-10 10-10 10z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" shape-rendering="crispEdges"><path fill="currentColor" d="M1 1h3v1H1zM8 1h3v1H8zM0 2h5v1H0zM7 2h5v1H7zM0 3h12v1H0zM0 4h12v1H0zM0 5h12v1H0zM1 6h10v1H1zM2 7h8v1H2zM3 8h6v1H3zM4 9h4v1H4zM5 10h2v1H5z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-8-4.9-10-10C.6 6.8 3.2 3.5 6.7 3.5c2.2 0 4 1.2 5.3 3 1.3-1.8 3.1-3 5.3-3 3.5 0 6.1 3.3 4.7 7-2 5.1-10 10-10 10z"/></svg>",
+  ],
+  "sparkle": [
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" d="M10 3.5c.6 4 2.5 5.9 6.5 6.5-4 .6-5.9 2.5-6.5 6.5-.6-4-2.5-5.9-6.5-6.5 4-.6 5.9-2.5 6.5-6.5zM18.5 2.5c.3 1.6 1 2.3 2.5 2.5-1.6.3-2.3 1-2.5 2.5-.3-1.6-1-2.3-2.5-2.5 1.6-.3 2.3-1 2.5-2.5zM18 15.5c.3 1.6 1 2.3 2.5 2.5-1.6.3-2.3 1-2.5 2.5-.3-1.6-1-2.3-2.5-2.5 1.6-.3 2.3-1 2.5-2.5z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" shape-rendering="crispEdges"><path fill="currentColor" d="M9 0h1v1H9zM4 1h1v1H4zM8 1h3v1H8zM4 2h1v1H4zM9 2h1v1H9zM3 3h3v1H3zM2 4h5v1H2zM0 5h9v1H0zM2 6h5v1H2zM3 7h3v1H3zM9 7h1v1H9zM4 8h1v1H4zM8 8h3v1H8zM4 9h1v1H4zM9 9h1v1H9z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5c.6 4 2.5 5.9 6.5 6.5-4 .6-5.9 2.5-6.5 6.5-.6-4-2.5-5.9-6.5-6.5 4-.6 5.9-2.5 6.5-6.5zM18.5 2.5v5M16 5h5M18 16v4M16 18h4"/></svg>",
+  ],
+  "star": [
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" shape-rendering="crispEdges"><path fill="currentColor" d="M5 0h2v1H5zM5 1h2v1H5zM4 2h4v1H4zM0 3h12v1H0zM1 4h10v1H1zM2 5h8v1H2zM3 6h6v1H3zM3 7h6v1H3zM2 8h3v1H2zM7 8h3v1H7zM2 9h2v1H2zM8 9h2v1H8zM1 10h2v1H1zM9 10h2v1H9z"/></svg>",
+    "<svg class="tipjar-icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>",
+  ],
+}
+`;

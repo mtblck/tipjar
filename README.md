@@ -1,0 +1,87 @@
+# tipjar
+
+A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. It sits in a corner of the page, folds to just its icon on a phone, and can tuck itself away when your footer, with its own support link, scrolls into view.
+
+- **Zero dependencies.** A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
+- **Works under a strict CSP.** No inline scripts, and no inline styles unless you ask for them. Theme it with CSS custom properties.
+- **Its own icons.** Heart, coffee, star, gift and sparkle, each drawn flat, pixel or outline, all in `currentColor`. Or bring your own SVG.
+- **Accessible.** A real link with a name that includes its visible text, a 44px target, a visible focus ring, and no motion for people who ask for less.
+
+```sh
+npm i tipjar
+```
+
+## Use it
+
+In the browser:
+
+```js
+import { mount } from 'tipjar';
+import 'tipjar/style.css';
+
+mount({
+  href: 'https://ko-fi.com/you',
+  description: 'this project on Ko-fi', // read after "Support" by screen readers
+  icon: 'coffee',
+  iconStyle: 'pixel',
+  hideWhenVisible: 'footer',
+});
+```
+
+On the server, or in any template, `tipjar()` returns the markup:
+
+```js
+import { tipjar } from 'tipjar';
+
+const html = tipjar({ href: 'https://github.com/sponsors/you', label: 'Sponsor', icon: 'heart' });
+```
+
+Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't use a bundler.
+
+## Options
+
+| Option | Default | |
+| --- | --- | --- |
+| `href` | (required) | http, https, mailto or a relative URL. Anything else throws, so the button can't run script. |
+| `label` | `"Support"` | The visible text. |
+| `description` | none | Extra words for screen readers, read after the label. |
+| `icon` | `"heart"` | `heart`, `coffee`, `star`, `gift`, `sparkle`; `false` for none; or `{ svg: '<svg…>' }` for your own. Custom SVG is inserted as is, so only pass markup you trust. |
+| `iconStyle` | `"flat"` | `flat`, `pixel` or `outline`. |
+| `position` | `"bottom-right"` | `bottom-left`, `top-right`, `top-left`, or `inline` to flow with the page. |
+| `compact` | `"auto"` | When to show only the icon: `auto` (under 600px wide), `always` or `never`. |
+| `newTab` | `false` | Open the link in a new tab. |
+| `look` | none | `{ background, label, icon, radius }` written as inline custom properties. Leave it out on strict-CSP sites. |
+| `className` | none | More classes for the link. |
+
+`mount()` also takes `target` (default `document.body`) and `hideWhenVisible` (an element or selector). It returns `{ element, destroy }`.
+
+`icon(name, style)` returns a single icon as an SVG string, and `ICON_NAMES` and `ICON_STYLES` list them.
+
+## Theme it
+
+Set any of these on `.tipjar` or an ancestor, such as `:root`:
+
+```css
+:root {
+  --tipjar-bg: #3a26c9;         /* fill */
+  --tipjar-label: #fff;         /* text */
+  --tipjar-icon: currentColor;  /* icon */
+  --tipjar-ring: #f6f3ec;       /* ring of page colour around the button */
+  --tipjar-radius: 999px;
+  --tipjar-font: inherit;
+  --tipjar-font-size: 0.875rem;
+  --tipjar-weight: 600;
+  --tipjar-size: 44px;          /* height, and width when compact */
+  --tipjar-icon-size: 16px;
+  --tipjar-offset: 16px;        /* distance from the screen edges */
+  --tipjar-z: 50;
+}
+```
+
+There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-border`, `--tipjar-shadow` and `--tipjar-focus`. For dark mode, set them again inside your own dark-theme selector.
+
+Pixel icons sit on a 12×12 grid and are sharpest at 12, 24 or 48px.
+
+## Licence
+
+MIT. The icons are tipjar's own drawings and ship under the same licence. Brand logos are left out on purpose; pass them with `icon: { svg }` if their owners allow it.

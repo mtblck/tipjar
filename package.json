@@ -1,0 +1,59 @@
+{
+  "name": "tipjar",
+  "version": "0.1.0",
+  "description": "A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. Zero dependencies, works under a strict CSP.",
+  "keywords": [
+    "tip",
+    "donate",
+    "support",
+    "ko-fi",
+    "sponsor",
+    "button",
+    "floating-action-button",
+    "svg-icons"
+  ],
+  "license": "MIT",
+  "author": "Matt Black (https://mattblack.space)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtblck/tipjar.git"
+  },
+  "bugs": "https://github.com/mtblck/tipjar/issues",
+  "funding": "https://ko-fi.com/mtblck",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./style.css": "./style.css",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "style.css"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.4",
+    "happy-dom": "^21.0.4",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
