@@ -10,7 +10,11 @@
   box-sizing: border-box;
   min-height: var(--tipjar-size, 44px);
   padding: 0 var(--tipjar-pad, 16px) 0 calc(var(--tipjar-pad, 16px) - 2px);
-  font: var(--tipjar-weight, 600) var(--tipjar-font-size, 0.875rem) / 1 var(--tipjar-font, inherit);
+  /* Longhands, so an unset --tipjar-font can inherit (inherit isn't allowed inside the font shorthand). */
+  font-family: var(--tipjar-font, inherit);
+  font-size: var(--tipjar-font-size, 0.875rem);
+  font-weight: var(--tipjar-weight, 600);
+  line-height: 1;
   letter-spacing: var(--tipjar-tracking, 0.01em);
   color: var(--_label);
   background: var(--_bg);
