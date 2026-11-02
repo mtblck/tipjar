@@ -99,7 +99,36 @@ Set any of these on `.tipjar` or an ancestor, such as `:root`:
 }
 ```
 
-There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-border`, `--tipjar-shadow` and `--tipjar-focus`. For dark mode, set them again inside your own dark-theme selector.
+There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-border`, `--tipjar-shadow` and `--tipjar-focus`.
+
+### Dark mode
+
+Out of the box the button is dark on a light page and light on a dark one, following `prefers-color-scheme`. The dark defaults only replace tipjar's own fallbacks, so any `--tipjar-*` value you set still wins in both.
+
+| Light | Dark |
+| --- | --- |
+| ![The button on a light page: dark fill, white label, white ring](docs/images/theme-light.png) | ![The button on a dark page: light fill, dark label, dark ring](docs/images/theme-dark.png) |
+
+If your site themes with a class or attribute instead of the media query, set the variables there:
+
+```css
+/* Your dark theme */
+[data-theme="dark"] {
+  --tipjar-bg: #f4f1ea;
+  --tipjar-label: #1f1d2b;
+  --tipjar-ring: #15141c; /* your page colour */
+}
+/* Keep the light look even when the visitor's system is dark */
+[data-theme="light"] {
+  --tipjar-bg: #1f1d2b;
+  --tipjar-label: #ffffff;
+  --tipjar-ring: #ffffff;
+}
+```
+
+Both default looks pass WCAG AA with room to spare: the label is 16.6:1 on light and 14.7:1 on dark.
+
+In forced-colours mode (Windows High Contrast), where fills and shadows are removed, the button gets a border and its icon and label take the system link colour.
 
 Pixel icons sit on a 12×12 grid and are sharpest at 12, 24 or 48px.
 
