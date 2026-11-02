@@ -1,0 +1,19 @@
+name: Feature
+description: An idea for tipjar.
+labels: ['type:feature']
+body:
+  - type: markdown
+    attributes:
+      value: tipjar stays small, dependency-free and strict-CSP friendly, and ships only its own icon drawings (no brand logos).
+  - type: textarea
+    id: need
+    attributes:
+      label: What you're trying to do
+      description: The problem, in your own words, before the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you'd like
+      description: An option, a CSS property, an icon. A snippet of how you'd use it helps.

@@ -1,0 +1,32 @@
+name: Bug
+description: Something about the button or its markup is wrong.
+labels: ['type:bug']
+body:
+  - type: markdown
+    attributes:
+      value: For security problems, please use private vulnerability reporting instead (see SECURITY.md).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options
+      description: The options you passed to `tipjar()` or `mount()`, and any `--tipjar-*` CSS you set.
+      render: js
+  - type: input
+    id: version
+    attributes:
+      label: tipjar version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: Safari 19 on iOS 19
