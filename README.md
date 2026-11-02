@@ -142,6 +142,23 @@ Both default looks pass WCAG AA with room to spare: the label is 16.6:1 on light
 
 In forced-colours mode (Windows High Contrast), where fills and shadows are removed, the button gets a border and its icon and label take the system link colour.
 
+## Stability
+
+From 1.0, tipjar follows [semver](https://semver.org): anything that could break a working button needs a major version. That covers:
+
+- **Exports:** `tipjar`, `mount`, `tuck`, `icon`, `ICON_NAMES`, `ICON_STYLES`, and the exported types.
+- **Options:** their names, accepted values and defaults, including the fixed 600px `compact: 'auto'` breakpoint.
+- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label` and `.tipjar-sr` classes, and the `data-position`, `data-compact` and `data-tucked` attributes, so your CSS can rely on them.
+- **Custom properties:** every `--tipjar-*` name in [Theme it](#theme-it).
+- **Icon drawings:** redrawing a built-in icon is a major version. Fixing a rendering bug in one, such as a stray pixel, is a patch, and both are noted in CHANGELOG.
+
+Not covered, and free to change in a minor or patch release with a CHANGELOG note:
+
+- Exact default colours, shadow, spacing and font size, as long as contrast stays at WCAG AA or better. Set the `--tipjar-*` properties to pin a look.
+- Anything else in the markup, such as attribute order, the private `--_*` properties, or the icon's SVG path data.
+- The wording of error and warning messages.
+- New options, icons, exports and custom properties, which come in minor versions.
+
 ## Releasing
 
 `npm run release -- 0.2.0` moves the CHANGELOG's [Unreleased] entries under a dated 0.2.0 heading and sets the version. Open that as a PR; merging it makes `.github/workflows/release.yml` publish to npm with provenance, tag `v0.2.0` and create the GitHub release. Pushing a `v*` tag by hand does the same. Publishing uses npm trusted publishing, so no token is stored.
