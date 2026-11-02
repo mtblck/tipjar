@@ -4,3 +4,5 @@ coverage/
 preview.html
 *.tgz
 dist-site/
+test-results/
+playwright-report/

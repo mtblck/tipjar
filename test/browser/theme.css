@@ -1,0 +1,5 @@
+/* A site's own theme, as a strict-CSP site would set it: in a stylesheet. */
+:root {
+  --tipjar-bg: #3a26c9;
+  --tipjar-label: #ffffff;
+}

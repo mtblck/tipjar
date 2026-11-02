@@ -1,0 +1,36 @@
+/* A plain page for the browser tests, with fonts every Linux runner has. */
+html {
+  font-family: "DejaVu Sans", sans-serif;
+  background: #f6f3ec;
+  color: #222222;
+}
+@media (prefers-color-scheme: dark) {
+  html {
+    background: #15141c;
+    color: #eeeeee;
+  }
+}
+body {
+  margin: 0;
+  padding: 16px;
+}
+/* Named for axe, but out of the way of the screenshots. */
+h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.tall {
+  height: 2000px;
+}
+footer {
+  height: 200px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 44px);
+  gap: 12px;
+  padding: 8px;
+}

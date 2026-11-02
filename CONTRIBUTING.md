@@ -13,9 +13,13 @@ npm test            # vitest
 npm run lint        # biome
 npm run typecheck   # tsc
 npm run build       # dist/
+npm run test:browser  # Playwright in Chromium: layout, tucking, motion, axe
 ```
 
-CI runs all four on Node 22, 24 and 26.
+CI runs the first four on Node 22, 24 and 26, and the browser tests on Ubuntu 24.04. The browser
+tests compare a few screenshots, made on Linux; after a deliberate visual change, refresh them with
+`npm run test:browser -- --update-snapshots` (on Linux, or in the Playwright Docker image) and
+look at the new images before committing.
 
 ## House rules
 
