@@ -4,6 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+- **Breaking:** `escapeHtml` and `safeHref` are no longer exported. `tipjar()` still checks every link and escapes every text option inside; they were never meant as general-purpose helpers.
+- The README has a Stability section saying what semver covers from 1.0.
 - The package now includes CHANGELOG.md.
 - **Look change:** on a dark page (`prefers-color-scheme: dark`) the default button is now light (`#f4f1ea` fill, `#1f1d2b` label) with a dark ring, instead of a dark button with a white halo. Only tipjar's fallbacks change: a `--tipjar-bg`, `--tipjar-label` or `--tipjar-ring` you set still wins.
 - In forced-colours mode (Windows High Contrast) the button gets a `LinkText` border, so it still reads as a button.
