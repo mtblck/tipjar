@@ -1,14 +1,16 @@
 import { type TipjarOptions, tipjar } from './tipjar.js';
+import { type TuckTarget, tuck } from './tuck.js';
 
 /** Options for {@link mount}: everything {@link tipjar} takes, plus where to put it. */
 export interface MountOptions extends TipjarOptions {
   /** The element to append the button to. Defaults to `document.body`. */
   target?: Element;
   /**
-   * An element (or a selector for one) that, while on screen, tucks the button away:
-   * usually a footer that has its own support link. Leave out to keep the button showing.
+   * Elements that, while any is on screen, tuck the button away: usually a footer that has its
+   * own support link. An element, a selector (every match is watched) or a list of elements.
+   * Leave out to keep the button showing. See {@link tuck}.
    */
-  hideWhenVisible?: Element | string;
+  hideWhenVisible?: TuckTarget;
 }
 
 /** What {@link mount} returns. */
@@ -31,21 +33,12 @@ export function mount(options: MountOptions): Mounted {
   holder.innerHTML = tipjar(rest);
   const element = holder.content.firstElementChild as HTMLAnchorElement;
   host.append(element);
-
-  let observer: IntersectionObserver | undefined;
-  const watched = typeof hideWhenVisible === 'string' ? document.querySelector(hideWhenVisible) : hideWhenVisible;
-  if (watched && typeof IntersectionObserver === 'function') {
-    observer = new IntersectionObserver((entries) => {
-      const seen = entries.some((entry) => entry.isIntersecting);
-      element.toggleAttribute('data-tucked', seen);
-    });
-    observer.observe(watched);
-  }
+  const untuck = hideWhenVisible === undefined ? undefined : tuck(element, hideWhenVisible);
 
   return {
     element,
     destroy: () => {
-      observer?.disconnect();
+      untuck?.();
       element.remove();
     },
   };

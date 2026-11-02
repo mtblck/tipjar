@@ -23,7 +23,7 @@ describe('mount', () => {
   });
 
   it('tucks away while the watched element is on screen', () => {
-    let callback: (entries: { isIntersecting: boolean }[]) => void = () => {};
+    let callback: (entries: { target: Element; isIntersecting: boolean }[]) => void = () => {};
     const disconnect = vi.fn();
     vi.stubGlobal(
       'IntersectionObserver',
@@ -37,16 +37,20 @@ describe('mount', () => {
     );
     document.body.innerHTML = '<footer id="foot"></footer>';
     const { element, destroy } = mount({ href: '/', hideWhenVisible: '#foot' });
-    callback([{ isIntersecting: true }]);
+    const foot = document.getElementById('foot') as Element;
+    callback([{ target: foot, isIntersecting: true }]);
     expect(element.hasAttribute('data-tucked')).toBe(true);
-    callback([{ isIntersecting: false }]);
+    callback([{ target: foot, isIntersecting: false }]);
     expect(element.hasAttribute('data-tucked')).toBe(false);
     destroy();
     expect(disconnect).toHaveBeenCalled();
   });
 
-  it('keeps showing when there is nothing to watch', () => {
+  it('keeps showing, and warns, when there is nothing to watch', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const { element } = mount({ href: '/', hideWhenVisible: '#missing' });
     expect(element.hasAttribute('data-tucked')).toBe(false);
+    expect(warn).toHaveBeenCalledOnce();
+    warn.mockRestore();
   });
 });

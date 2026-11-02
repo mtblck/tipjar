@@ -53,7 +53,23 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `look` | none | `{ background, label, icon, radius }` written as inline custom properties. Leave it out on strict-CSP sites. |
 | `className` | none | More classes for the link. |
 
-`mount()` also takes `target` (default `document.body`) and `hideWhenVisible` (an element or selector). It returns `{ element, destroy }`.
+`mount()` also takes `target` (default `document.body`) and `hideWhenVisible`. It returns `{ element, destroy }`.
+
+## Tuck it away
+
+`hideWhenVisible` hides the button while any of the elements it names is on screen, usually a footer with its own support link. It takes an element, a selector (every match is watched) or a list of elements. A selector is looked up once, when the button mounts, so run it after the footer is on the page; if nothing matches, tipjar warns in the console and the button keeps showing.
+
+For a button that's already on the page, such as `tipjar()` markup rendered on the server or by a static site generator, use `tuck()`:
+
+```js
+import { tuck } from 'tipjar';
+
+const untuck = tuck(document.querySelector('.tipjar'), 'footer, .support-links');
+// Later, to stop watching and show it again:
+untuck();
+```
+
+A tucked button gets `data-tucked`, which hides it and takes it out of the tab order.
 
 `icon(name, style)` returns a single icon as an SVG string, and `ICON_NAMES` and `ICON_STYLES` list them.
 
