@@ -7,6 +7,8 @@ A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any l
 - **Its own icons.** Heart, coffee, star, gift and sparkle, each drawn flat, pixel or outline, all in `currentColor`. Or bring your own SVG.
 - **Accessible.** A real link with a name that includes its visible text, a 44px target, a visible focus ring, and no motion for people who ask for less.
 
+![Three tipjar buttons on a light page: "Support" with a heart, "Buy me a coffee" with a pixel cup, and a compact star](docs/images/theme-light.png)
+
 ```sh
 npm i tipjar
 ```
@@ -37,6 +39,8 @@ const html = tipjar({ href: 'https://github.com/sponsors/you', label: 'Sponsor',
 ```
 
 Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't use a bundler.
+
+[docs/recipes.md](docs/recipes.md) has short recipes for React, Vue, Svelte, Astro, Next.js and plain HTML with no build step, and notes for sites with a strict CSP.
 
 ## Options
 
@@ -71,6 +75,14 @@ untuck();
 ```
 
 A tucked button gets `data-tucked`, which hides it and takes it out of the tab order.
+
+## Icons
+
+Five icons, each drawn three ways, all in `currentColor`:
+
+![heart, coffee, star, gift and sparkle, each drawn flat, pixel and outline](docs/images/icons.png)
+
+Pixel icons sit on a 12×12 grid, so they're sharpest at 12, 24 or 48px. At the default 16px each cell is a pixel and a third, so on a sharp-edged pixel icon the steps come out a little uneven; set `--tipjar-icon-size: 24px` if you use them.
 
 `icon(name, style)` returns a single icon as an SVG string, and `ICON_NAMES` and `ICON_STYLES` list them.
 
@@ -129,8 +141,6 @@ If your site themes with a class or attribute instead of the media query, set th
 Both default looks pass WCAG AA with room to spare: the label is 16.6:1 on light and 14.7:1 on dark.
 
 In forced-colours mode (Windows High Contrast), where fills and shadows are removed, the button gets a border and its icon and label take the system link colour.
-
-Pixel icons sit on a 12×12 grid and are sharpest at 12, 24 or 48px.
 
 ## Releasing
 
