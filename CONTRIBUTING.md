@@ -14,6 +14,7 @@ npm run lint        # biome
 npm run typecheck   # tsc
 npm run build       # dist/
 npm run test:browser  # Playwright in Chromium: layout, tucking, motion, axe
+npm run check:package # what would ship: files, size budget, publint, arethetypeswrong
 ```
 
 CI runs the first four on Node 22, 24 and 26, and the browser tests on Ubuntu 24.04. The browser

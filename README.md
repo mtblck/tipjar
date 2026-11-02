@@ -2,7 +2,7 @@
 
 A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. It sits in a corner of the page, folds to just its icon on a phone, and can tuck itself away when your footer, with its own support link, scrolls into view.
 
-- **Zero dependencies.** A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
+- **Zero dependencies, about 7 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
 - **Works under a strict CSP.** No inline scripts, and no inline styles unless you ask for them. Theme it with CSS custom properties.
 - **Its own icons.** Heart, coffee, star, gift and sparkle, each drawn flat, pixel or outline, all in `currentColor`. Or bring your own SVG.
 - **Accessible.** A real link with a name that includes its visible text, a 44px target, a visible focus ring, and no motion for people who ask for less.
