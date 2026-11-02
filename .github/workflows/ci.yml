@@ -33,3 +33,20 @@ jobs:
       - run: npm test
       - run: npm run typecheck
       - run: npm run build
+
+  browser:
+    name: Browser tests (Chromium)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      # The Chromium build pinned by @playwright/test, and the system libraries and fonts it needs.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
