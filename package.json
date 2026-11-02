@@ -36,13 +36,15 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "style.css"
+    "style.css",
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "check:package": "npm run build && node scripts/check-package.mjs && publint --strict && attw --pack . --profile esm-only --exclude-entrypoints ./style.css",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
     "format": "biome format --write .",
@@ -53,10 +55,12 @@
     "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
     "@axe-core/playwright": "4.14.0",
     "@biomejs/biome": "^2.6.4",
     "@playwright/test": "1.63.0",
     "happy-dom": "^21.0.4",
+    "publint": "0.3.25",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5"
   },

@@ -4,6 +4,7 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+- The package now includes CHANGELOG.md.
 - **Look change:** on a dark page (`prefers-color-scheme: dark`) the default button is now light (`#f4f1ea` fill, `#1f1d2b` label) with a dark ring, instead of a dark button with a white halo. Only tipjar's fallbacks change: a `--tipjar-bg`, `--tipjar-label` or `--tipjar-ring` you set still wins.
 - In forced-colours mode (Windows High Contrast) the button gets a `LinkText` border, so it still reads as a button.
 - The hover lift only applies on devices that can hover, so it no longer sticks after a tap on a phone.
