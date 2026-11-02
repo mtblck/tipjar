@@ -88,6 +88,8 @@ describe('safeHref', () => {
       'javascript:alert(1)',
       'JaVaScRiPt:alert(1)',
       'java\tscript:alert(1)',
+      '\u0001javascript:alert(1)',
+      '\u0000 \u001fjavascript:alert(1)',
       'data:text/html,x',
       'vbscript:x',
     ]) {

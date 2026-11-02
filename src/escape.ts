@@ -18,8 +18,10 @@ const HAS_SCHEME = /^[a-z][a-z0-9+.-]*:/i;
  */
 export function safeHref(href: string): string {
   const trimmed = String(href ?? '').trim();
-  // Browsers ignore tabs and newlines inside a scheme, so judge the URL without them.
-  const squeezed = trimmed.replace(/[\t\n\r]/g, '');
+  // Browsers drop tabs and newlines anywhere in a URL, and control characters and spaces at its
+  // start, so judge the URL the way the browser will read it.
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: matching control characters is the point
+  const squeezed = trimmed.replace(/[\t\n\r]/g, '').replace(/^[\u0000-\u0020]+/, '');
   if (!trimmed) throw new TypeError('tipjar: `href` is required');
   if (HAS_SCHEME.test(squeezed) && !SAFE_SCHEME.test(squeezed)) {
     throw new TypeError(`tipjar: unsupported link "${trimmed}"; use http, https, mailto or a relative URL`);
