@@ -4,6 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-02
+
 - **Breaking:** `escapeHtml` and `safeHref` are no longer exported. `tipjar()` still checks every link and escapes every text option inside; they were never meant as general-purpose helpers.
 - The README has a Stability section saying what semver covers from 1.0.
 - The package now includes CHANGELOG.md.
@@ -21,5 +23,6 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 - First version: `tipjar()`, `mount()`, `icon()`, `style.css`, and five icons (heart, coffee, star, gift, sparkle) drawn flat, pixel and outline.
 
-[Unreleased]: https://github.com/mtblck/tipjar/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/mtblck/tipjar/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/mtblck/tipjar/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/mtblck/tipjar/releases/tag/v0.1.0
