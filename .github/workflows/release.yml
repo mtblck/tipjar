@@ -1,0 +1,119 @@
+name: Release
+
+# Releases a version two ways:
+# - Release PR: a merge to main that changes `version` in package.json tags
+#   that commit vX.Y.Z itself, then publishes. Merging the release PR is the
+#   approval. The tag is made with this run's token, so it doesn't start a
+#   second run of this workflow.
+# - Tag: Matt pushes a version tag (v0.1.0, v0.2.3) by hand.
+# Either way it publishes to npm, then makes the GitHub release from that
+# version's CHANGELOG section. npm trusted publishing: npm accepts this
+# workflow's OIDC token instead of a stored token, and adds a provenance
+# statement linking the package to this commit. Keep this file's name: the
+# trusted publisher on npmjs.com (tipjar -> Settings -> Trusted publishers ->
+# GitHub Actions, repository mtblck/tipjar, workflow release.yml) names it.
+# README "Releasing" has the steps.
+on:
+  push:
+    tags: ['v*']
+    branches: [main]
+    # Ignored for tag pushes, which always run.
+    paths: [package.json]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Check and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      # To create the tag and the GitHub release.
+      contents: write
+      # The OIDC token npm trusted publishing exchanges for a one-time publish token.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # Node 24 ships npm 11, which trusted publishing needs (11.5.1 or newer).
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      # On main, release only when this push changed the version: a merge that
+      # touches package.json for anything else (a dependency) does nothing.
+      - name: Version to release
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if [ "$REF_TYPE" = tag ]; then
+            # The tag must name the version in package.json, so v0.1.1 can't publish 0.1.0.
+            if [ "$REF_NAME" != "v$version" ]; then echo "::error::Tag $REF_NAME doesn't match package.json version $version."; exit 1; fi
+            echo "release=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          before=""
+          if git fetch --depth=1 --no-tags origin "$BEFORE" 2>/dev/null; then
+            before=$(git show "$BEFORE:package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+          fi
+          if [ "$before" = "$version" ]; then
+            echo "::notice::package.json changed but its version is still $version; nothing to release."
+            exit 0
+          fi
+          # Already tagged: a re-run finishing this release (the later steps skip
+          # what's done) if the tag is on this commit, otherwise nothing to do.
+          tagged=$(git ls-remote --tags origin "refs/tags/v$version" | cut -f1)
+          if [ -n "$tagged" ] && [ "$tagged" != "$GITHUB_SHA" ]; then
+            echo "::notice::v$version is already tagged on another commit; nothing to release."
+            exit 0
+          fi
+          [ -n "$tagged" ] && echo "tagged=true" >> "$GITHUB_OUTPUT"
+          if ! grep -q "^## \[$version\] - " CHANGELOG.md; then
+            echo "::error::package.json is $version but CHANGELOG.md has no '## [$version] - date' section."
+            exit 1
+          fi
+          echo "release=true" >> "$GITHUB_OUTPUT"
+      - if: steps.version.outputs.release == 'true'
+        run: npm ci --ignore-scripts
+      - name: Already on npm?
+        if: steps.version.outputs.release == 'true'
+        id: npm
+        run: |
+          version=$(node -p "require('./package.json').version")
+          name=$(node -p "require('./package.json').name")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "::notice::$name@$version is already on npm; skipping the publish."
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+      # prepublishOnly runs lint, typecheck, tests and the build first, so a red
+      # check stops the publish (and, from main, the tag); the build it makes is
+      # what ships.
+      - if: steps.version.outputs.release == 'true' && steps.npm.outputs.published != 'true'
+        run: npm publish --access public
+      - name: Tag the release commit
+        if: steps.version.outputs.release == 'true' && github.ref_type != 'tag' && steps.version.outputs.tagged != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh api "repos/$GITHUB_REPOSITORY/git/refs" -f "ref=refs/tags/$TAG" -f "sha=$GITHUB_SHA" --silent
+      - name: GitHub release
+        if: steps.version.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          # This version's CHANGELOG section: from its heading to the next one.
+          awk -v v="${TAG#v}" '/^## \[/ { on = index($0, "## [" v "]") == 1; next } /^\[.*\]: / { exit } on' CHANGELOG.md > notes.md
+          if gh release view "$TAG" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then exit 0; fi
+          gh release create "$TAG" -R "$GITHUB_REPOSITORY" --title "$TAG" --notes-file notes.md --verify-tag

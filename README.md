@@ -82,6 +82,10 @@ There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-bo
 
 Pixel icons sit on a 12×12 grid and are sharpest at 12, 24 or 48px.
 
+## Releasing
+
+`npm run release -- 0.2.0` moves the CHANGELOG's [Unreleased] entries under a dated 0.2.0 heading and sets the version. Open that as a PR; merging it makes `.github/workflows/release.yml` publish to npm with provenance, tag `v0.2.0` and create the GitHub release. Pushing a `v*` tag by hand does the same. Publishing uses npm trusted publishing, so no token is stored.
+
 ## Licence
 
 MIT. The icons are tipjar's own drawings and ship under the same licence. Brand logos are left out on purpose; pass them with `icon: { svg }` if their owners allow it.
