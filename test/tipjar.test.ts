@@ -30,6 +30,17 @@ describe('tipjar', () => {
     expect(html).toContain('data-position="top-left" data-compact="never"');
   });
 
+  it('tells screen readers a new tab opens, in words that can be changed', () => {
+    expect(tipjar({ href: '/', newTab: true })).toContain(
+      '<span class="tipjar-label">Support<span class="tipjar-sr"> (opens in a new tab)</span></span>',
+    );
+    expect(tipjar({ href: '/', newTab: true, description: 'on Ko-fi', newTabHint: '(nouvel onglet)' })).toContain(
+      '<span class="tipjar-sr"> on Ko-fi (nouvel onglet)</span>',
+    );
+    expect(tipjar({ href: '/', newTab: true, newTabHint: '' })).not.toContain('tipjar-sr');
+    expect(tipjar({ href: '/', newTabHint: '(new tab)' })).not.toContain('new tab');
+  });
+
   it('never folds a button with no icon', () => {
     const html = tipjar({ href: '/', icon: false, compact: 'always' });
     expect(html).not.toContain('<svg');
