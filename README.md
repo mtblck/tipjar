@@ -7,7 +7,7 @@ A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any l
 - **Its own icons.** Heart, coffee, star, gift and sparkle, each drawn flat, pixel or outline, all in `currentColor`. Or bring your own SVG.
 - **Accessible.** A real link with a name that includes its visible text, a 44px target, a visible focus ring, and no motion for people who ask for less.
 
-![The default button on a light page and on a dark page, next to its compact, icon-only form](docs/images/theme-light.png)
+![Three tipjar buttons on a light page: "Support" with a heart, "Buy me a coffee" with a pixel cup, and a compact star](docs/images/theme-light.png)
 
 ```sh
 npm i tipjar
