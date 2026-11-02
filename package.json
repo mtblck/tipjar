@@ -1,6 +1,6 @@
 {
   "name": "tipjar",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. Zero dependencies, works under a strict CSP.",
   "keywords": [
     "tip",
@@ -66,5 +66,6 @@
   },
   "overrides": {
     "playwright-core": "1.63.0"
-  }
+  },
+  "homepage": "https://mattblack.space/tools/tipjar/"
 }
