@@ -1,0 +1,126 @@
+/* tipjar: a floating tip button. Theme it with the --tipjar-* custom properties, on .tipjar or any ancestor. */
+.tipjar {
+  --_bg: var(--tipjar-bg, #1f1d2b);
+  --_label: var(--tipjar-label, #ffffff);
+  position: fixed;
+  z-index: var(--tipjar-z, 50);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tipjar-gap, 8px);
+  box-sizing: border-box;
+  min-height: var(--tipjar-size, 44px);
+  padding: 0 var(--tipjar-pad, 16px) 0 calc(var(--tipjar-pad, 16px) - 2px);
+  /* Longhands, so an unset --tipjar-font can inherit (inherit isn't allowed inside the font shorthand). */
+  font-family: var(--tipjar-font, inherit);
+  font-size: var(--tipjar-font-size, 0.875rem);
+  font-weight: var(--tipjar-weight, 600);
+  line-height: 1;
+  letter-spacing: var(--tipjar-tracking, 0.01em);
+  color: var(--_label);
+  background: var(--_bg);
+  border: var(--tipjar-border, 0);
+  border-radius: var(--tipjar-radius, 999px);
+  text-decoration: none;
+  /* A ring of the page colour keeps the button readable over whatever scrolls beneath it. */
+  box-shadow: var(--tipjar-shadow, 0 0 0 2px var(--tipjar-ring, #ffffff), 0 8px 18px -8px rgb(0 0 0 / 0.5));
+  transition:
+    transform 0.15s,
+    opacity 0.2s,
+    visibility 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tipjar:hover {
+  color: var(--_label);
+  transform: translateY(-2px);
+}
+.tipjar:focus-visible {
+  outline: 2px solid var(--tipjar-focus, var(--_bg));
+  outline-offset: 4px;
+}
+.tipjar[data-position="bottom-right"] {
+  right: max(var(--tipjar-offset, 16px), env(safe-area-inset-right, 0px));
+  bottom: max(var(--tipjar-offset, 16px), env(safe-area-inset-bottom, 0px));
+}
+.tipjar[data-position="bottom-left"] {
+  left: max(var(--tipjar-offset, 16px), env(safe-area-inset-left, 0px));
+  bottom: max(var(--tipjar-offset, 16px), env(safe-area-inset-bottom, 0px));
+}
+.tipjar[data-position="top-right"] {
+  right: max(var(--tipjar-offset, 16px), env(safe-area-inset-right, 0px));
+  top: max(var(--tipjar-offset, 16px), env(safe-area-inset-top, 0px));
+}
+.tipjar[data-position="top-left"] {
+  left: max(var(--tipjar-offset, 16px), env(safe-area-inset-left, 0px));
+  top: max(var(--tipjar-offset, 16px), env(safe-area-inset-top, 0px));
+}
+.tipjar[data-position="inline"] {
+  position: relative;
+}
+.tipjar-icon {
+  display: inline-flex;
+  flex: none;
+  width: var(--tipjar-icon-size, 16px);
+  height: var(--tipjar-icon-size, 16px);
+  color: var(--tipjar-icon, currentColor);
+}
+.tipjar-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+.tipjar-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* Tucked away (by mount's hideWhenVisible): hidden, and out of the tab order. */
+.tipjar[data-tucked] {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+}
+/* Compact: just the icon, in a circle. The label stays for screen readers. */
+.tipjar[data-compact="always"] {
+  width: var(--tipjar-size, 44px);
+  padding: 0;
+  justify-content: center;
+}
+.tipjar[data-compact="always"] .tipjar-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .tipjar[data-compact="auto"] {
+    width: var(--tipjar-size, 44px);
+    padding: 0;
+    justify-content: center;
+  }
+  .tipjar[data-compact="auto"] .tipjar-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tipjar {
+    transition: none;
+  }
+  .tipjar:hover,
+  .tipjar[data-tucked] {
+    transform: none;
+  }
+}
+@media print {
+  .tipjar {
+    display: none;
+  }
+}
