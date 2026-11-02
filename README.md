@@ -38,6 +38,8 @@ const html = tipjar({ href: 'https://github.com/sponsors/you', label: 'Sponsor',
 
 Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't use a bundler.
 
+[docs/recipes.md](docs/recipes.md) has short recipes for React, Vue, Svelte, Astro, Next.js and plain HTML with no build step, and notes for sites with a strict CSP.
+
 ## Options
 
 | Option | Default | |
