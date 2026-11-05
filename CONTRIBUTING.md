@@ -15,12 +15,18 @@ npm run typecheck   # tsc
 npm run build       # dist/
 npm run test:browser  # Playwright in Chromium: layout, tucking, motion, axe
 npm run check:package # what would ship: files, size budget, publint, arethetypeswrong
+npm run docs          # API reference page in api-docs/, from the JSDoc
 ```
 
 CI runs the first four on Node 22, 24 and 26, and the browser tests on Ubuntu 24.04. The browser
 tests compare a few screenshots, made on Linux; after a deliberate visual change, refresh them with
 `npm run test:browser -- --update-snapshots` (on Linux, or in the Playwright Docker image) and
 look at the new images before committing.
+
+`npm run docs` builds the API reference with TypeDoc from `dist/index.d.ts`, with the README as
+its front page and docs/recipes.md as a page. TypeDoc needs TypeScript 6's compiler API, which
+TypeScript 7 no longer has, so it has its own `tools/api-docs/package.json`. It fails on any
+warning, such as an exported option without a doc comment, and CI runs it.
 
 ## House rules
 

@@ -9,6 +9,14 @@ updates:
       dev-dependencies:
         dependency-type: development
     versioning-strategy: increase
+  # The API docs page's own tools: TypeDoc pins TypeScript 6, so they live apart from the package.
+  - package-ecosystem: npm
+    directory: /tools/api-docs
+    schedule:
+      interval: monthly
+    groups:
+      api-docs:
+        patterns: ['*']
   - package-ecosystem: github-actions
     directory: /
     schedule:

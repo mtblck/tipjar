@@ -44,6 +44,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "docs": "npm run build && npm --prefix tools/api-docs ci --ignore-scripts && npm --prefix tools/api-docs run build",
     "check:package": "npm run build && node scripts/check-package.mjs && publint --strict && attw --pack . --profile esm-only --exclude-entrypoints ./style.css",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
