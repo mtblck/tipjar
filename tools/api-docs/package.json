@@ -1,0 +1,13 @@
+{
+  "name": "tipjar-api-docs",
+  "private": true,
+  "description": "Builds tipjar's API reference page with TypeDoc. Kept apart from the package because TypeDoc needs TypeScript 6's compiler API, which TypeScript 7 no longer ships.",
+  "type": "module",
+  "scripts": {
+    "build": "typedoc"
+  },
+  "devDependencies": {
+    "typedoc": "0.28.20",
+    "typescript": "6.0.3"
+  }
+}

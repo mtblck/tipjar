@@ -28,7 +28,13 @@ export interface TipjarOptions {
   /** Extra words for screen readers, read after the label, such as "this project on Ko-fi". */
   description?: string;
   /** A built-in icon, `false` for none, or `{ svg }` with your own trusted SVG markup. Defaults to heart. */
-  icon?: IconName | false | { svg: string };
+  icon?:
+    | IconName
+    | false
+    | {
+        /** Your own SVG markup, inserted as is: pass only markup you trust. */
+        svg: string;
+      };
   /** How the built-in icon is drawn. Defaults to flat. */
   iconStyle?: IconStyle;
   /** Defaults to bottom-right. */

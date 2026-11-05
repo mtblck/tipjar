@@ -52,3 +52,26 @@ jobs:
       # The Chromium build pinned by @playwright/test, and the system libraries and fonts it needs.
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+
+  docs:
+    name: API docs (TypeDoc)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tools/api-docs/package-lock.json
+      - run: npm ci --ignore-scripts
+      # Fails on any TypeDoc warning, such as an exported option with no doc comment.
+      - run: npm run docs
+      - uses: actions/upload-artifact@v7
+        with:
+          name: api-docs
+          path: api-docs/

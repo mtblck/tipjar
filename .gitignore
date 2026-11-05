@@ -6,3 +6,4 @@ preview.html
 dist-site/
 test-results/
 playwright-report/
+/api-docs/

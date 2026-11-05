@@ -1,0 +1,37 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "tipjar",
+  "entryPoints": ["../../dist/index.d.ts"],
+  "tsconfig": "./tsconfig.json",
+  "out": "../../api-docs",
+  "readme": "../../README.md",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "sort": ["kind", "source-order"],
+  "navigationLinks": {
+    "GitHub": "https://github.com/mtblck/tipjar",
+    "Demo": "https://mattblack.space/tools/tipjar/"
+  },
+  "treatWarningsAsErrors": true,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": true
+  },
+  "disableSources": true,
+  "highlightLanguages": [
+    "bash",
+    "sh",
+    "css",
+    "html",
+    "javascript",
+    "jsx",
+    "json",
+    "typescript",
+    "tsx",
+    "vue",
+    "svelte",
+    "astro"
+  ]
+}
