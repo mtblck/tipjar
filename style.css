@@ -401,6 +401,28 @@ svg.tipjar-icon,
     animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) infinite;
   }
 }
+/* The nudge (from mount's nudgeAfter, or nudge()): the button tilts and its icon's part plays
+   once. Hovering later plays the part again, as usual. */
+.tipjar[data-nudge] {
+  animation: tipjar-nudge 0.7s ease-in-out;
+}
+.tipjar[data-nudge]:not([data-animate="none"]) .tipjar-part {
+  animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) 1;
+}
+@keyframes tipjar-nudge {
+  20% {
+    rotate: -6deg;
+  }
+  40% {
+    rotate: 5deg;
+  }
+  60% {
+    rotate: -3deg;
+  }
+  80% {
+    rotate: 1deg;
+  }
+}
 /* Heart: two beats and a rest. */
 @keyframes tipjar-beat {
   15% {

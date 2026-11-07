@@ -2,7 +2,7 @@
 
 A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. It sits in a corner of the page, folds to just its icon on a phone, and can tuck itself away when your footer, with its own support link, scrolls into view.
 
-- **Zero dependencies, about 12 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
+- **Zero dependencies, about 13 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
 - **Works under a strict CSP.** No inline scripts, and no inline styles unless you ask for them. Theme it with CSS custom properties.
 - **Its own icons.** Ten of them, each drawn flat, pixel or outline, all in `currentColor`, and each with a part that moves on hover. Or bring your own SVG.
 - **Accessible.** A real link with a name that includes its visible text, a 44px target, a visible focus ring, and no motion for people who ask for less.
@@ -61,7 +61,7 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `look` | none | `{ background, label, icon, radius }` written as inline custom properties. Leave it out on strict-CSP sites. |
 | `className` | none | More classes for the link. |
 
-`mount()` also takes `target` (default `document.body`) and `hideWhenVisible`. It returns `{ element, destroy }`.
+`mount()` also takes `target` (default `document.body`), `hideWhenVisible` and `nudgeAfter`. It returns `{ element, destroy }`.
 
 ## Tuck it away
 
@@ -90,6 +90,18 @@ Pixel icons sit on a 12×12 grid, so they're sharpest at 12, 24 or 48px. At the 
 Every icon has a moving part, which plays on hover by default (see `animate`): the heart beats, steam rises from the coffee and drifts up past the button's edge, the star turns, the gift's lid hops, the small sparkles twinkle, a coin drops into the jar, the coin flips, the tea bag's tag swings, the pizza slice pulls away, and a note floats up from the music. Pixel icons move a whole cell at a time, so a pixel star pulses instead of turning, and a pixel tag sways. In a compact button, a bigger icon such as `--tipjar-icon-size: 28px` shows them off, and `--tipjar-accent` colours the moving parts.
 
 `icon(name, style)` returns a single icon as an SVG string, and `ICON_NAMES` and `ICON_STYLES` list them.
+
+## Nudge
+
+`nudgeAfter: 20` gives the button one small wiggle after 20 seconds, with its icon's part playing once, to catch the eye. It happens at most once per visit (it notes this in `sessionStorage`, only for this tab), never while the button is tucked away or the tab is hidden, never once someone has hovered or focused the button, and never for people who ask for less motion.
+
+For a button that's already on the page, use `nudge()`, which returns a function that cancels it:
+
+```js
+import { nudge } from 'tipjar';
+
+const cancel = nudge(document.querySelector('.tipjar'), 20);
+```
 
 ## Referrer
 
@@ -155,9 +167,9 @@ In forced-colours mode (Windows High Contrast), where fills and shadows are remo
 
 From 1.0, tipjar follows [semver](https://semver.org): anything that could break a working button needs a major version. That covers:
 
-- **Exports:** `tipjar`, `mount`, `tuck`, `icon`, `ICON_NAMES`, `ICON_STYLES`, and the exported types.
+- **Exports:** `tipjar`, `mount`, `tuck`, `nudge`, `icon`, `ICON_NAMES`, `ICON_STYLES`, and the exported types.
 - **Options:** their names, accepted values and defaults, including the fixed 600px `compact: 'auto'` breakpoint.
-- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label` and `.tipjar-sr` classes, and the `data-position`, `data-compact`, `data-hover`, `data-enter` and `data-tucked` attributes, so your CSS can rely on them.
+- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label` and `.tipjar-sr` classes, and the `data-position`, `data-compact`, `data-hover`, `data-enter`, `data-animate`, `data-nudge` and `data-tucked` attributes, so your CSS can rely on them.
 - **Custom properties:** every `--tipjar-*` name in [Theme it](#theme-it).
 - **Icon drawings:** redrawing a built-in icon is a major version. Fixing a rendering bug in one, such as a stray pixel, is a patch, and both are noted in CHANGELOG.
 

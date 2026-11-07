@@ -278,3 +278,22 @@ test.describe('animated icons', () => {
     expect(await style(page.locator('.tipjar'), 'overflow')).toBe('visible');
   });
 });
+
+test.describe('nudge', () => {
+  test('tilts the button and plays the icon once, after the wait', async ({ page }) => {
+    await open(page, { buttons: [{ icon: 'coffee', nudgeAfter: 0.3 }] });
+    const button = page.locator('.tipjar');
+    await expect(button).toHaveAttribute('data-nudge', '');
+    expect(await style(button, 'animation-name')).toBe('tipjar-nudge');
+    const steam = page.locator('.tipjar-steam').first();
+    expect(await style(steam, 'animation-name')).toBe('tipjar-rise');
+    expect(await style(steam, 'animation-iteration-count')).toBe('1');
+  });
+
+  test('never with reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, { buttons: [{ nudgeAfter: 0.1 }] });
+    await page.waitForTimeout(400);
+    await expect(page.locator('.tipjar')).not.toHaveAttribute('data-nudge');
+  });
+});
