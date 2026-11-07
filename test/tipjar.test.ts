@@ -80,6 +80,13 @@ describe('tipjar', () => {
     );
   });
 
+  it('writes when icons animate only when it is not on hover', () => {
+    expect(tipjar({ href: '/', animate: 'hover' })).not.toContain('data-animate');
+    expect(tipjar({ href: '/', animate: 'loop' })).toContain('data-animate="loop"');
+    // @ts-expect-error not a choice
+    expect(() => tipjar({ href: '/', animate: 'always' })).toThrow(/unknown animate "always"/);
+  });
+
   it('rejects unknown hover effects and entrances', () => {
     // @ts-expect-error not an effect
     expect(() => tipjar({ href: '/', hover: 'spin' })).toThrow(/unknown hover "spin"/);

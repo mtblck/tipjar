@@ -17,6 +17,14 @@ describe('icon', () => {
     expect(Object.fromEntries(ICON_NAMES.map((n) => [n, ICON_STYLES.map((s) => icon(n, s))]))).toMatchSnapshot();
   });
 
+  it('draws moving parts last, with a class that names their animation', () => {
+    expect(icon('coffee', 'flat')).toMatch(/(<path class="tipjar-part tipjar-steam" d="[^"]+"\/>){2}<\/svg>$/);
+    expect(icon('jar', 'outline')).toMatch(/<path class="tipjar-part tipjar-coin" d="[^"]+"\/><\/svg>$/);
+    // Pixel parts step a whole cell at a time.
+    expect(icon('jar', 'pixel')).toContain('class="tipjar-part tipjar-coin tipjar-step"');
+    expect(icon('heart', 'flat')).not.toContain('tipjar-part');
+  });
+
   it('defaults to flat', () => {
     expect(icon('heart')).toBe(icon('heart', 'flat'));
   });
