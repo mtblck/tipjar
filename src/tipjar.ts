@@ -56,7 +56,7 @@ export interface TipjarOptions {
   /** The hover effect. Defaults to lift. Only on devices that can hover; with reduced motion, nothing moves. */
   hover?: Hover;
   /**
-   * When the icon's moving parts play, for icons that have them (coffee, jar): `hover` (the
+   * When the built-in icon's moving part plays (the heart beats, the steam rises): `hover` (the
    * default, also on keyboard focus), `loop` (three times when the page loads, and on hover) or
    * `none`. Nothing moves for people who ask for less motion.
    */
