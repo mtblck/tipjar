@@ -17,7 +17,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
     for (const position of POSITIONS) {
       test(`${position}: every icon style, compact and not, with and without a description`, async ({ page }) => {
         const buttons = STYLES.flatMap((iconStyle) =>
-          (['always', 'never'] as const).flatMap((compact) =>
+          (['always', 'never', 'hover'] as const).flatMap((compact) =>
             [undefined, 'this project on Ko-fi'].map((description) => ({
               position: 'inline',
               iconStyle,

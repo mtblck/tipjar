@@ -2,7 +2,7 @@
 
 A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. It sits in a corner of the page, folds to just its icon on a phone, and can tuck itself away when your footer, with its own support link, scrolls into view.
 
-- **Zero dependencies, about 7 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
+- **Zero dependencies, about 9 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
 - **Works under a strict CSP.** No inline scripts, and no inline styles unless you ask for them. Theme it with CSS custom properties.
 - **Its own icons.** Heart, coffee, star, gift and sparkle, each drawn flat, pixel or outline, all in `currentColor`. Or bring your own SVG.
 - **Accessible.** A real link with a name that includes its visible text, a 44px target, a visible focus ring, and no motion for people who ask for less.
@@ -52,7 +52,9 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `icon` | `"heart"` | `heart`, `coffee`, `star`, `gift`, `sparkle`; `false` for none; or `{ svg: '<svg…>' }` for your own. Custom SVG is inserted as is, so only pass markup you trust. |
 | `iconStyle` | `"flat"` | `flat`, `pixel` or `outline`. |
 | `position` | `"bottom-right"` | `bottom-left`, `top-right`, `top-left`, or `inline` to flow with the page. |
-| `compact` | `"auto"` | When to show only the icon: `auto` (under 600px wide), `always` or `never`. |
+| `compact` | `"auto"` | When to show only the icon: `auto` (under 600px wide), `always`, `never`, or `hover`: a circle that opens into the full button on hover or keyboard focus, and stays a circle on touch screens. |
+| `hover` | `"lift"` | The hover effect: `lift`, `pop` (a springy grow), `wiggle` (the icon tilts), `shine` (a highlight sweeps across), `fill` (a second colour wipes in) or `none`. |
+| `enter` | `"none"` | An entrance when the page loads: `fade`, `slide` or `pop`, after `--tipjar-enter-delay` (0.6s). |
 | `newTab` | `false` | Open the link in a new tab, with `rel="noopener"`. Screen readers hear the `newTabHint` after the label. |
 | `newTabHint` | `"(opens in a new tab)"` | With `newTab`, words read to screen readers so people know a tab will open. Translate it, or `''` for none. |
 | `look` | none | `{ background, label, icon, radius }` written as inline custom properties. Leave it out on strict-CSP sites. |
@@ -111,7 +113,11 @@ Set any of these on `.tipjar` or an ancestor, such as `:root`:
 }
 ```
 
-There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-border`, `--tipjar-shadow` and `--tipjar-focus`.
+There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-border`, `--tipjar-shadow` and `--tipjar-focus`. For the motion options: `--tipjar-shine` (the `shine` highlight), `--tipjar-fill` (the `fill` colour, by default the fill mixed with a little of the label) and `--tipjar-enter-delay`.
+
+### Motion
+
+Hover effects only run on devices that can hover, so nothing sticks after a tap; a tap gets a small squish instead. Everything is CSS, so it works under a strict CSP. For people who turn on reduced motion there is no lift, pop, wiggle, sweep, squish or entrance, and a `compact: 'hover'` button opens at once instead of sliding.
 
 ### Dark mode
 
@@ -148,7 +154,7 @@ From 1.0, tipjar follows [semver](https://semver.org): anything that could break
 
 - **Exports:** `tipjar`, `mount`, `tuck`, `icon`, `ICON_NAMES`, `ICON_STYLES`, and the exported types.
 - **Options:** their names, accepted values and defaults, including the fixed 600px `compact: 'auto'` breakpoint.
-- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label` and `.tipjar-sr` classes, and the `data-position`, `data-compact` and `data-tucked` attributes, so your CSS can rely on them.
+- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label` and `.tipjar-sr` classes, and the `data-position`, `data-compact`, `data-hover`, `data-enter` and `data-tucked` attributes, so your CSS can rely on them.
 - **Custom properties:** every `--tipjar-*` name in [Theme it](#theme-it).
 - **Icon drawings:** redrawing a built-in icon is a major version. Fixing a rendering bug in one, such as a stray pixel, is a patch, and both are noted in CHANGELOG.
 

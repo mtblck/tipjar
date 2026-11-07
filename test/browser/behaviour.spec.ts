@@ -65,3 +65,141 @@ test.describe('colours', () => {
     expect(await style(page.locator('.tipjar'), 'border-top-width')).toBe('2px');
   });
 });
+
+test.describe('compact hover', () => {
+  test.use({ viewport: { width: 1024, height: 700 } });
+
+  test('is a circle that opens into the full button on hover, and closes again', async ({ page }) => {
+    await open(page, { buttons: [{ compact: 'hover', label: 'Buy me a coffee', icon: 'coffee' }] });
+    const button = page.locator('.tipjar');
+    const label = page.locator('.tipjar-label');
+    await expect.poll(async () => (await button.boundingBox())?.width).toBe(44);
+    const iconBefore = await page.locator('.tipjar-icon').boundingBox();
+    await button.hover();
+    await expect.poll(async () => (await button.boundingBox())?.width).toBeGreaterThan(120);
+    await expect.poll(() => style(label, 'opacity')).toBe('1');
+    // The button grows away from its corner, so the right edge stays put.
+    const box = await button.boundingBox();
+    expect(Math.round(1024 - ((box?.x ?? 0) + (box?.width ?? 0)))).toBe(16);
+    // The icon keeps its place at the left of the circle's padding.
+    const iconAfter = await page.locator('.tipjar-icon').boundingBox();
+    expect(Math.round((iconAfter?.x ?? 0) - (box?.x ?? 0))).toBe(Math.round((iconBefore?.x ?? 0) - (1024 - 16 - 44)));
+    await page.mouse.move(0, 0);
+    await expect.poll(async () => (await button.boundingBox())?.width).toBe(44);
+  });
+
+  test('opens for keyboard focus too', async ({ page }) => {
+    await open(page, { buttons: [{ compact: 'hover' }] });
+    await page.keyboard.press('Tab');
+    await expect.poll(async () => (await page.locator('.tipjar').boundingBox())?.width).toBeGreaterThan(80);
+  });
+
+  test('still opens with reduced motion, all at once', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, { buttons: [{ compact: 'hover' }] });
+    const button = page.locator('.tipjar');
+    await button.hover();
+    expect((await button.boundingBox())?.width).toBeGreaterThan(80);
+    expect(await style(page.locator('.tipjar-label'), 'transition-duration')).toBe('0s');
+  });
+});
+
+test.describe('touch', () => {
+  test.use({ hasTouch: true, isMobile: true, viewport: { width: 375, height: 667 } });
+
+  test('a compact hover button stays a circle where nothing can hover', async ({ page }) => {
+    await open(page, { buttons: [{ compact: 'hover' }] });
+    expect(await page.evaluate(() => matchMedia('(hover: hover)').matches)).toBe(false);
+    expect((await page.locator('.tipjar').boundingBox())?.width).toBe(44);
+  });
+});
+
+test.describe('hover effects', () => {
+  test('pop scales the button up', async ({ page }) => {
+    await open(page, { buttons: [{ hover: 'pop' }] });
+    const button = page.locator('.tipjar');
+    await button.hover();
+    await expect.poll(() => style(button, 'transform')).toMatch(/^matrix\(1\.06, 0, 0, 1\.06/);
+  });
+
+  test('wiggle turns the icon and leaves the button still', async ({ page }) => {
+    await open(page, { buttons: [{ hover: 'wiggle' }] });
+    const button = page.locator('.tipjar');
+    await button.hover();
+    expect(await style(page.locator('.tipjar-icon'), 'animation-name')).toBe('tipjar-wiggle');
+    expect(await style(button, 'transform')).toBe('none');
+  });
+
+  test('fill wipes a second colour in under the label', async ({ page }) => {
+    await open(page, { buttons: [{ hover: 'fill' }] });
+    const button = page.locator('.tipjar');
+    const layer = () => button.evaluate((el) => getComputedStyle(el, '::before').clipPath);
+    expect(await layer()).toBe('inset(0px 100% 0px 0px)');
+    await button.hover();
+    await expect.poll(layer).toBe('inset(0px)');
+  });
+
+  test('shine sweeps a highlight across', async ({ page }) => {
+    await open(page, { buttons: [{ hover: 'shine' }] });
+    const button = page.locator('.tipjar');
+    const at = () => button.evaluate((el) => getComputedStyle(el, '::before').backgroundPositionX);
+    expect(await at()).toBe('120%');
+    await button.hover();
+    await expect.poll(at).toBe('-30%');
+  });
+
+  test('none stays still', async ({ page }) => {
+    await open(page, { buttons: [{ hover: 'none' }] });
+    const button = page.locator('.tipjar');
+    await button.hover();
+    await page.waitForTimeout(250);
+    expect(await style(button, 'transform')).toBe('none');
+  });
+
+  test('squishes while pressed', async ({ page }) => {
+    await open(page, { buttons: [{}] });
+    const button = page.locator('.tipjar');
+    await button.hover();
+    await page.mouse.down();
+    await expect.poll(() => style(button, 'scale')).toBe('0.96');
+    await page.mouse.up();
+  });
+
+  test('none of it moves with reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, { buttons: [{ hover: 'pop' }, { hover: 'wiggle', position: 'inline' }] });
+    const [pop, wiggle] = await page.locator('.tipjar').all();
+    await pop.hover();
+    expect(await style(pop, 'transform')).toBe('none');
+    await wiggle.hover();
+    expect(await style(wiggle.locator('.tipjar-icon'), 'animation-name')).toBe('none');
+  });
+});
+
+test.describe('entrance', () => {
+  for (const enter of ['fade', 'slide', 'pop'] as const) {
+    test(`${enter} arrives after the delay and ends at rest`, async ({ page }) => {
+      await open(page, { buttons: [{ enter }] });
+      const button = page.locator('.tipjar');
+      // Still waiting for the 0.6s delay: the first frame is held.
+      expect(Number(await style(button, 'opacity'))).toBe(0);
+      await expect.poll(() => style(button, 'opacity'), { timeout: 3000 }).toBe('1');
+      await expect.poll(() => button.evaluate((el) => el.getAnimations().length)).toBe(0);
+      expect(await style(button, 'translate')).toBe('none');
+      expect(await style(button, 'scale')).toBe('none');
+    });
+  }
+
+  test('a button tucked when the page loads stays hidden', async ({ page }) => {
+    await open(page, { footer: true, buttons: [{ enter: 'fade', hideWhenVisible: 'footer' }] });
+    await page.locator('footer').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1200);
+    await expect(page.locator('.tipjar')).toBeHidden();
+  });
+
+  test('shows at once with reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, { buttons: [{ enter: 'slide' }] });
+    expect(await style(page.locator('.tipjar'), 'opacity')).toBe('1');
+  });
+});

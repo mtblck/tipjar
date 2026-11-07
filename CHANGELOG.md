@@ -4,6 +4,12 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+- `compact: 'hover'` shows just the icon in a circle, and opens into the full button with the label sliding in on hover or keyboard focus. On touch screens it stays a circle.
+- The `hover` option picks a hover effect: `lift` (the default, as before), `pop`, `wiggle`, `shine`, `fill` or `none`. `--tipjar-shine` and `--tipjar-fill` set their colours.
+- The `enter` option adds an entrance when the page loads: `fade`, `slide` or `pop`, after `--tipjar-enter-delay` (0.6s by default).
+- **Look change:** the button squishes slightly while pressed, on every device.
+- Reduced motion now also turns off every new effect, and wins over a site's own transitions on the button.
+
 ## [1.0.0] - 2026-11-02
 
 - **Breaking:** `escapeHtml` and `safeHref` are no longer exported. `tipjar()` still checks every link and escapes every text option inside; they were never meant as general-purpose helpers.
