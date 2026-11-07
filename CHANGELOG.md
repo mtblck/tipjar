@@ -4,6 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-07
+
 - A `compact: 'hover'` button no longer lifts as it opens; it only grows sideways. It doesn't pop or wiggle either: opening is its hover effect. Shine and fill still play.
 - `hover: 'wiggle'` now tilts the whole button, like the nudge, instead of the icon. `hover` is for the button and `animate` for the icon's own moving part.
 
@@ -39,7 +41,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 - First version: `tipjar()`, `mount()`, `icon()`, `style.css`, and five icons (heart, coffee, star, gift, sparkle) drawn flat, pixel and outline.
 
-[Unreleased]: https://github.com/mtblck/tipjar/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/mtblck/tipjar/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/mtblck/tipjar/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mtblck/tipjar/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/mtblck/tipjar/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/mtblck/tipjar/releases/tag/v0.1.0
