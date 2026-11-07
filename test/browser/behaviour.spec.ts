@@ -78,6 +78,8 @@ test.describe('compact hover', () => {
     await button.hover();
     await expect.poll(async () => (await button.boundingBox())?.width).toBeGreaterThan(120);
     await expect.poll(() => style(label, 'opacity')).toBe('1');
+    // It opens sideways only: no lift.
+    expect(await style(button, 'transform')).toBe('none');
     // The button grows away from its corner, so the right edge stays put.
     const box = await button.boundingBox();
     expect(Math.round(1024 - ((box?.x ?? 0) + (box?.width ?? 0)))).toBe(16);

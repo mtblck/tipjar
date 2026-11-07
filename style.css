@@ -39,9 +39,10 @@
 .tipjar:hover {
   color: var(--_label);
 }
-/* Lift on hover only where there is hover: on touch screens it would stick after a tap. */
+/* Lift on hover only where there is hover: on touch screens it would stick after a tap. A compact
+   hover button doesn't lift: opening sideways is its hover effect. */
 @media (hover: hover) {
-  .tipjar:not([data-hover]):hover {
+  .tipjar:not([data-hover], [data-compact="hover"]):hover {
     transform: translateY(-2px);
   }
 }
