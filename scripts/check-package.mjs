@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 
 /** Bytes, gzipped file by file, that dist/*.js and style.css may add up to. Raise it on purpose. */
-export const BUDGET = 8000;
+export const BUDGET = 9500;
 
 const ALLOWED = [
   /^dist\/[\w-]+\.(js|d\.ts)$/,

@@ -71,6 +71,22 @@ describe('tipjar', () => {
     expect(html).toContain('&#34;me&#34;');
   });
 
+  it('writes a hover effect and an entrance only when asked', () => {
+    const plain = tipjar({ href: '/', hover: 'lift', enter: 'none' });
+    expect(plain).not.toContain('data-hover');
+    expect(plain).not.toContain('data-enter');
+    expect(tipjar({ href: '/', hover: 'shine', enter: 'slide', compact: 'hover' })).toContain(
+      'data-compact="hover" data-hover="shine" data-enter="slide"',
+    );
+  });
+
+  it('rejects unknown hover effects and entrances', () => {
+    // @ts-expect-error not an effect
+    expect(() => tipjar({ href: '/', hover: 'spin' })).toThrow(/unknown hover "spin"/);
+    // @ts-expect-error not an entrance
+    expect(() => tipjar({ href: '/', enter: 'zoom' })).toThrow(/unknown enter "zoom"/);
+  });
+
   it('rejects unknown positions and compact modes', () => {
     // @ts-expect-error not a position
     expect(() => tipjar({ href: '/', position: 'middle' })).toThrow(/unknown position/);

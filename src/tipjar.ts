@@ -4,8 +4,17 @@ import { icon as drawIcon, type IconName, type IconStyle } from './icons.js';
 /** Where the button sits: a corner of the screen, or `inline` to flow with the page. */
 export type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'inline';
 
-/** When the label folds away, leaving the icon: under 600px wide (`auto`), always, or never. */
-export type Compact = 'auto' | 'always' | 'never';
+/**
+ * When the label folds away, leaving the icon: under 600px wide (`auto`), always, never, or
+ * `hover`: a circle that opens into the full button on hover or keyboard focus.
+ */
+export type Compact = 'auto' | 'always' | 'never' | 'hover';
+
+/** What the button does on hover: lift (the default), pop, wiggle its icon, shine, fill, or nothing. */
+export type Hover = 'lift' | 'pop' | 'wiggle' | 'shine' | 'fill' | 'none';
+
+/** How the button arrives when the page loads: no animation (the default), fade, slide or pop. */
+export type Enter = 'none' | 'fade' | 'slide' | 'pop';
 
 /** Colours and shape, written as inline CSS custom properties. Strict-CSP sites set the `--tipjar-*` properties in CSS instead. */
 export interface TipjarLook {
@@ -41,6 +50,10 @@ export interface TipjarOptions {
   position?: Position;
   /** Defaults to auto. */
   compact?: Compact;
+  /** The hover effect. Defaults to lift. Only on devices that can hover; with reduced motion, nothing moves. */
+  hover?: Hover;
+  /** An entrance animation, after `--tipjar-enter-delay` (0.6s). Defaults to none. */
+  enter?: Enter;
   /** Open the link in a new tab. Defaults to false. */
   newTab?: boolean;
   /**
@@ -62,7 +75,9 @@ const LOOK_VARS: Record<keyof TipjarLook, string> = {
 };
 
 const POSITIONS: readonly Position[] = ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'inline'];
-const COMPACTS: readonly Compact[] = ['auto', 'always', 'never'];
+const COMPACTS: readonly Compact[] = ['auto', 'always', 'never', 'hover'];
+const HOVERS: readonly Hover[] = ['lift', 'pop', 'wiggle', 'shine', 'fill', 'none'];
+const ENTERS: readonly Enter[] = ['none', 'fade', 'slide', 'pop'];
 
 function oneOf<T extends string>(name: string, value: T, allowed: readonly T[]): T {
   if (!allowed.includes(value)) throw new TypeError(`tipjar: unknown ${name} "${String(value)}"`);
@@ -96,6 +111,8 @@ export function tipjar(options: TipjarOptions): string {
   const label = options.label ?? 'Support';
   const position = oneOf('position', options.position ?? 'bottom-right', POSITIONS);
   const compact = oneOf('compact', options.compact ?? 'auto', COMPACTS);
+  const hover = oneOf('hover', options.hover ?? 'lift', HOVERS);
+  const enter = oneOf('enter', options.enter ?? 'none', ENTERS);
   const classes = ['tipjar', ...(options.className ? options.className.split(/\s+/).filter(Boolean) : [])];
   const target = options.newTab ? ' target="_blank" rel="noopener"' : '';
   const hint = options.newTab ? (options.newTabHint ?? '(opens in a new tab)') : '';
@@ -104,9 +121,12 @@ export function tipjar(options: TipjarOptions): string {
   const ico = iconMarkup(options.icon, options.iconStyle ?? 'flat');
   // With no icon there is nothing to fold to, so the label always shows.
   const fold = ico ? compact : 'never';
+  // The defaults write nothing, so markup from before these options existed is unchanged.
+  const motion =
+    (hover === 'lift' ? '' : ` data-hover="${hover}"`) + (enter === 'none' ? '' : ` data-enter="${enter}"`);
   return (
     `<a class="${escapeHtml(classes.join(' '))}" href="${escapeHtml(href)}"${target}` +
-    ` data-position="${escapeHtml(position)}" data-compact="${escapeHtml(fold)}"${styleAttr(options.look)}>` +
+    ` data-position="${escapeHtml(position)}" data-compact="${escapeHtml(fold)}"${motion}${styleAttr(options.look)}>` +
     `${ico}<span class="tipjar-label">${escapeHtml(label)}${sr}</span></a>`
   );
 }

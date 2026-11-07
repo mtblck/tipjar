@@ -27,16 +27,21 @@
   box-shadow: var(--tipjar-shadow, 0 0 0 2px var(--_ring), 0 8px 18px -8px rgb(0 0 0 / 0.5));
   transition:
     transform 0.15s,
+    scale 0.1s,
     opacity 0.2s,
     visibility 0.2s;
   -webkit-tap-highlight-color: transparent;
+}
+/* A small squish while pressed, on every device, so a tap on a phone feels like a press. */
+.tipjar:active {
+  scale: 0.96;
 }
 .tipjar:hover {
   color: var(--_label);
 }
 /* Lift on hover only where there is hover: on touch screens it would stick after a tap. */
 @media (hover: hover) {
-  .tipjar:hover {
+  .tipjar:not([data-hover]):hover {
     transform: translateY(-2px);
   }
 }
@@ -125,15 +130,210 @@
     white-space: nowrap;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .tipjar {
-    transition: none;
+/* Compact hover: a circle that opens into the full button on hover or keyboard focus. The left
+   padding stays the same, so the icon holds still while the label slides in beside it. */
+.tipjar[data-compact="hover"] {
+  --_fold: calc((var(--tipjar-size, 44px) - var(--tipjar-icon-size, 16px)) / 2);
+  gap: 0;
+  padding: 0 var(--_fold);
+  transition:
+    transform 0.15s,
+    scale 0.1s,
+    opacity 0.2s,
+    visibility 0.2s,
+    gap 0.3s,
+    padding 0.3s;
+}
+.tipjar[data-compact="hover"] .tipjar-label {
+  max-width: 0;
+  /* A little room above and below, so overflow: hidden doesn't clip descenders. */
+  margin: -0.2em 0;
+  padding: 0.2em 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  translate: -4px 0;
+  transition:
+    max-width 0.3s,
+    opacity 0.15s,
+    translate 0.3s;
+}
+.tipjar[data-compact="hover"]:focus-visible {
+  gap: var(--tipjar-gap, 8px);
+  padding: 0 var(--tipjar-pad, 16px) 0 var(--_fold);
+}
+.tipjar[data-compact="hover"]:focus-visible .tipjar-label {
+  max-width: 12em;
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    max-width 0.3s,
+    opacity 0.2s 0.1s,
+    translate 0.3s;
+}
+@media (hover: hover) {
+  .tipjar[data-compact="hover"]:hover {
+    gap: var(--tipjar-gap, 8px);
+    padding: 0 var(--tipjar-pad, 16px) 0 var(--_fold);
   }
-  .tipjar:hover,
-  .tipjar[data-tucked] {
-    transform: none;
+  .tipjar[data-compact="hover"]:hover .tipjar-label {
+    max-width: 12em;
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      max-width 0.3s,
+      opacity 0.2s 0.1s,
+      translate 0.3s;
   }
 }
+/* Where the browser can animate to max-content, the button opens exactly as wide as its label. */
+@supports (interpolate-size: allow-keywords) {
+  .tipjar[data-compact="hover"] {
+    interpolate-size: allow-keywords;
+  }
+  .tipjar[data-compact="hover"]:focus-visible .tipjar-label {
+    max-width: max-content;
+  }
+  @media (hover: hover) {
+    .tipjar[data-compact="hover"]:hover .tipjar-label {
+      max-width: max-content;
+    }
+  }
+}
+/* Hover effects, chosen with the hover option. With none set, the button lifts (above). */
+.tipjar[data-hover="pop"] {
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale 0.1s,
+    opacity 0.2s,
+    visibility 0.2s;
+}
+.tipjar[data-hover="pop"][data-compact="hover"] {
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale 0.1s,
+    opacity 0.2s,
+    visibility 0.2s,
+    gap 0.3s,
+    padding 0.3s;
+}
+.tipjar[data-hover="shine"],
+.tipjar[data-hover="fill"] {
+  isolation: isolate;
+}
+/* Shine and fill paint on a layer between the button's fill and its icon and label. */
+.tipjar[data-hover="shine"]::before,
+.tipjar[data-hover="fill"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.tipjar[data-hover="shine"]::before {
+  background:
+    linear-gradient(
+      105deg,
+      transparent 35%,
+      var(--tipjar-shine, color-mix(in srgb, var(--_label) 30%, transparent)) 50%,
+      transparent 65%
+    )
+    120% 0 / 250% 100% no-repeat;
+}
+.tipjar[data-hover="fill"]::before {
+  background: var(--tipjar-fill, color-mix(in srgb, var(--_label) 18%, var(--_bg)));
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.3s ease-out;
+}
+@media (hover: hover) {
+  .tipjar[data-hover="pop"]:hover {
+    transform: scale(1.06);
+  }
+  .tipjar[data-hover="wiggle"]:hover .tipjar-icon {
+    animation: tipjar-wiggle 0.5s ease-in-out;
+  }
+  /* The shine sweeps across once on the way in, and resets unseen on the way out. */
+  .tipjar[data-hover="shine"]:hover::before {
+    background-position: -30% 0;
+    transition: background-position 0.6s ease-in-out;
+  }
+  .tipjar[data-hover="fill"]:hover::before {
+    clip-path: inset(0);
+  }
+}
+@keyframes tipjar-wiggle {
+  25% {
+    rotate: -14deg;
+  }
+  50% {
+    rotate: 10deg;
+  }
+  75% {
+    rotate: -5deg;
+  }
+}
+/* Entrances, chosen with the enter option. Only the starting frame is given, so the button ends
+   wherever its own styles put it: a button that is tucked when the page loads stays hidden. */
+.tipjar[data-enter] {
+  animation: 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) var(--tipjar-enter-delay, 0.6s) backwards;
+}
+.tipjar[data-enter="fade"] {
+  animation-name: tipjar-fade;
+}
+.tipjar[data-enter="slide"] {
+  animation-name: tipjar-slide-up;
+}
+.tipjar[data-enter="slide"][data-position^="top"] {
+  animation-name: tipjar-slide-down;
+}
+.tipjar[data-enter="pop"] {
+  animation-name: tipjar-pop;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes tipjar-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes tipjar-slide-up {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+@keyframes tipjar-slide-down {
+  from {
+    opacity: 0;
+    translate: 0 -24px;
+  }
+}
+@keyframes tipjar-pop {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+}
+/* Less motion: no lift, pop, squish, wiggle, sweep or entrance, and changes happen at once. A
+   compact hover button still opens, just without sliding. These are !important so that no
+   effect's own, more specific rule can bring the motion back. */
+/* biome-ignore-start lint/complexity/noImportantStyles: reduced motion has to win over every effect */
+@media (prefers-reduced-motion: reduce) {
+  .tipjar,
+  .tipjar *,
+  .tipjar::before {
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+    animation: none !important;
+  }
+  .tipjar,
+  .tipjar .tipjar-label {
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+}
+/* biome-ignore-end lint/complexity/noImportantStyles: reduced motion has to win over every effect */
 /* Forced colours (Windows High Contrast) drop the fill and the ring: draw a border instead. */
 @media (forced-colors: active) {
   .tipjar {
@@ -145,6 +345,9 @@
   }
   .tipjar:focus-visible {
     outline-color: Highlight;
+  }
+  .tipjar::before {
+    display: none;
   }
 }
 @media print {
