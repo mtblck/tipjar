@@ -87,6 +87,11 @@
   width: 100%;
   height: 100%;
 }
+/* Moving parts, such as steam, may rise past the icon's box and the button's edge. */
+svg.tipjar-icon,
+.tipjar-icon > svg {
+  overflow: visible;
+}
 .tipjar-sr {
   position: absolute;
   width: 1px;
@@ -312,6 +317,70 @@
   from {
     opacity: 0;
     scale: 0.5;
+  }
+}
+/* Animated icons. Each moving part names its animation; the animate option says when it plays:
+   on hover or keyboard focus (the default), three times when the page loads and on hover (loop),
+   or never (none). Percentages are of the icon's drawing, so the pixel icons, which move a whole
+   cell per step, travel as far as the others. */
+.tipjar-part {
+  color: var(--tipjar-accent, currentColor);
+}
+.tipjar-steam {
+  --_part: tipjar-rise 1.8s;
+}
+.tipjar-steam ~ .tipjar-steam {
+  --_part-wait: 0.5s;
+}
+.tipjar-coin {
+  --_part: tipjar-drop 1.6s;
+}
+.tipjar-step.tipjar-steam {
+  --_part-ease: steps(6);
+}
+.tipjar-step.tipjar-coin {
+  --_part-ease: steps(3);
+}
+.tipjar[data-animate="loop"] .tipjar-part {
+  animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) 3;
+}
+.tipjar:not([data-animate="none"]):focus-visible .tipjar-part {
+  animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) infinite;
+}
+@media (hover: hover) {
+  .tipjar:not([data-animate="none"]):hover .tipjar-part {
+    animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) infinite;
+  }
+}
+/* Steam rises and fades, then wells up again from inside the cup. */
+@keyframes tipjar-rise {
+  35% {
+    opacity: 1;
+  }
+  60% {
+    translate: 0 -50%;
+    opacity: 0;
+  }
+  60.01% {
+    translate: 0 50%;
+    opacity: 0;
+  }
+}
+/* A coin falls in from above, rests where it's drawn, then drops into the jar. */
+@keyframes tipjar-drop {
+  0% {
+    translate: 0 -50%;
+    opacity: 0;
+  }
+  45%,
+  65% {
+    translate: 0 0;
+    opacity: 1;
+  }
+  85%,
+  100% {
+    translate: 0 25%;
+    opacity: 0;
   }
 }
 /* Less motion: no lift, pop, squish, wiggle, sweep or entrance, and changes happen at once. A

@@ -204,3 +204,47 @@ test.describe('entrance', () => {
     expect(await style(page.locator('.tipjar'), 'opacity')).toBe('1');
   });
 });
+
+test.describe('animated icons', () => {
+  const parts = (page: import('@playwright/test').Page) =>
+    page.locator('.tipjar-part').evaluateAll((els) => els.map((el) => getComputedStyle(el).animationName));
+
+  test('steam rises from the coffee on hover, and stops after', async ({ page }) => {
+    await open(page, { buttons: [{ icon: 'coffee' }] });
+    expect(await parts(page)).toEqual(['none', 'none']);
+    await page.locator('.tipjar').hover();
+    expect(await parts(page)).toEqual(['tipjar-rise', 'tipjar-rise']);
+    await page.mouse.move(0, 0);
+    expect(await parts(page)).toEqual(['none', 'none']);
+  });
+
+  test('plays on keyboard focus', async ({ page }) => {
+    await open(page, { buttons: [{ icon: 'jar' }] });
+    await page.keyboard.press('Tab');
+    expect(await parts(page)).toEqual(['tipjar-drop']);
+  });
+
+  test('loop plays three times on load, then rests', async ({ page }) => {
+    await open(page, { buttons: [{ icon: 'jar', animate: 'loop' }] });
+    const count = await page.locator('.tipjar-coin').evaluate((el) => getComputedStyle(el).animationIterationCount);
+    expect(count).toBe('3');
+  });
+
+  test('none never moves, and nor does anything with reduced motion', async ({ page }) => {
+    await open(page, { buttons: [{ icon: 'coffee', animate: 'none' }] });
+    await page.locator('.tipjar').hover();
+    expect(await parts(page)).toEqual(['none', 'none']);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await open(page, { buttons: [{ icon: 'coffee', animate: 'loop' }] });
+    await page.reload();
+    await page.locator('html[data-ready]').waitFor({ state: 'attached' });
+    await page.locator('.tipjar').hover();
+    expect(await parts(page)).toEqual(['none', 'none']);
+  });
+
+  test('steam can rise past the button, which does not clip it', async ({ page }) => {
+    await open(page, { buttons: [{ icon: 'coffee', compact: 'always' }] });
+    expect(await style(page.locator('svg.tipjar-icon'), 'overflow')).toBe('visible');
+    expect(await style(page.locator('.tipjar'), 'overflow')).toBe('visible');
+  });
+});

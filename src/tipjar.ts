@@ -13,6 +13,9 @@ export type Compact = 'auto' | 'always' | 'never' | 'hover';
 /** What the button does on hover: lift (the default), pop, wiggle its icon, shine, fill, or nothing. */
 export type Hover = 'lift' | 'pop' | 'wiggle' | 'shine' | 'fill' | 'none';
 
+/** When an icon's moving parts play: on hover or focus (the default), three times on load and on hover, or never. */
+export type Animate = 'hover' | 'loop' | 'none';
+
 /** How the button arrives when the page loads: no animation (the default), fade, slide or pop. */
 export type Enter = 'none' | 'fade' | 'slide' | 'pop';
 
@@ -52,6 +55,12 @@ export interface TipjarOptions {
   compact?: Compact;
   /** The hover effect. Defaults to lift. Only on devices that can hover; with reduced motion, nothing moves. */
   hover?: Hover;
+  /**
+   * When the icon's moving parts play, for icons that have them (coffee, jar): `hover` (the
+   * default, also on keyboard focus), `loop` (three times when the page loads, and on hover) or
+   * `none`. Nothing moves for people who ask for less motion.
+   */
+  animate?: Animate;
   /** An entrance animation, after `--tipjar-enter-delay` (0.6s). Defaults to none. */
   enter?: Enter;
   /** Open the link in a new tab. Defaults to false. */
@@ -77,6 +86,7 @@ const LOOK_VARS: Record<keyof TipjarLook, string> = {
 const POSITIONS: readonly Position[] = ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'inline'];
 const COMPACTS: readonly Compact[] = ['auto', 'always', 'never', 'hover'];
 const HOVERS: readonly Hover[] = ['lift', 'pop', 'wiggle', 'shine', 'fill', 'none'];
+const ANIMATES: readonly Animate[] = ['hover', 'loop', 'none'];
 const ENTERS: readonly Enter[] = ['none', 'fade', 'slide', 'pop'];
 
 function oneOf<T extends string>(name: string, value: T, allowed: readonly T[]): T {
@@ -113,6 +123,7 @@ export function tipjar(options: TipjarOptions): string {
   const compact = oneOf('compact', options.compact ?? 'auto', COMPACTS);
   const hover = oneOf('hover', options.hover ?? 'lift', HOVERS);
   const enter = oneOf('enter', options.enter ?? 'none', ENTERS);
+  const animate = oneOf('animate', options.animate ?? 'hover', ANIMATES);
   const classes = ['tipjar', ...(options.className ? options.className.split(/\s+/).filter(Boolean) : [])];
   const target = options.newTab ? ' target="_blank" rel="noopener"' : '';
   const hint = options.newTab ? (options.newTabHint ?? '(opens in a new tab)') : '';
@@ -123,7 +134,9 @@ export function tipjar(options: TipjarOptions): string {
   const fold = ico ? compact : 'never';
   // The defaults write nothing, so markup from before these options existed is unchanged.
   const motion =
-    (hover === 'lift' ? '' : ` data-hover="${hover}"`) + (enter === 'none' ? '' : ` data-enter="${enter}"`);
+    (hover === 'lift' ? '' : ` data-hover="${hover}"`) +
+    (enter === 'none' ? '' : ` data-enter="${enter}"`) +
+    (animate === 'hover' ? '' : ` data-animate="${animate}"`);
   return (
     `<a class="${escapeHtml(classes.join(' '))}" href="${escapeHtml(href)}"${target}` +
     ` data-position="${escapeHtml(position)}" data-compact="${escapeHtml(fold)}"${motion}${styleAttr(options.look)}>` +

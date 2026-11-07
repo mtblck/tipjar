@@ -6,6 +6,7 @@
 export { ICON_NAMES, ICON_STYLES, type IconName, type IconStyle, icon } from './icons.js';
 export { type Mounted, type MountOptions, mount } from './mount.js';
 export {
+  type Animate,
   type Compact,
   type Enter,
   type Hover,
