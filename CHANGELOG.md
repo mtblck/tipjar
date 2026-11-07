@@ -4,7 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
-- A `compact: 'hover'` button no longer lifts as it opens; it only grows sideways.
+- A `compact: 'hover'` button no longer lifts as it opens; it only grows sideways. It doesn't pop or wiggle either: opening is its hover effect. Shine and fill still play.
+- `hover: 'wiggle'` now tilts the whole button, like the nudge, instead of the icon. `hover` is for the button and `animate` for the icon's own moving part.
 
 ## [1.1.0] - 2026-11-07
 

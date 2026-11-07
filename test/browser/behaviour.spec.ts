@@ -124,13 +124,36 @@ test.describe('hover effects', () => {
     await expect.poll(() => style(button, 'transform')).toMatch(/^matrix\(1\.06, 0, 0, 1\.06/);
   });
 
-  test('wiggle turns the icon and leaves the button still', async ({ page }) => {
+  test('wiggle tilts the whole button', async ({ page }) => {
     await open(page, { buttons: [{ hover: 'wiggle' }] });
     const button = page.locator('.tipjar');
     await button.hover();
-    expect(await style(page.locator('.tipjar-icon'), 'animation-name')).toBe('tipjar-wiggle');
-    expect(await style(button, 'transform')).toBe('none');
+    expect(await style(button, 'animation-name')).toBe('none, tipjar-wiggle');
   });
+
+  test('wiggle leaves the entrance alone: it does not play again after a hover', async ({ page }) => {
+    await open(page, { buttons: [{ hover: 'wiggle', enter: 'fade' }] });
+    const button = page.locator('.tipjar');
+    await expect.poll(() => style(button, 'opacity'), { timeout: 3000 }).toBe('1');
+    await page.waitForTimeout(600);
+    await button.hover();
+    expect(await style(button, 'animation-name')).toBe('tipjar-fade, tipjar-wiggle');
+    await page.mouse.move(0, 0);
+    await page.waitForTimeout(50);
+    expect(await style(button, 'opacity')).toBe('1');
+  });
+
+  for (const hover of ['pop', 'wiggle'] as const) {
+    test(`a compact hover button only opens: no ${hover}`, async ({ page }) => {
+      await open(page, { buttons: [{ hover, compact: 'hover' }] });
+      const button = page.locator('.tipjar');
+      await button.hover();
+      await page.waitForTimeout(350);
+      expect(await style(button, 'transform')).toBe('none');
+      expect(await style(button, 'animation-name')).toBe('none');
+      expect((await button.boundingBox())?.width).toBeGreaterThan(80);
+    });
+  }
 
   test('fill wipes a second colour in under the label', async ({ page }) => {
     await open(page, { buttons: [{ hover: 'fill' }] });
@@ -175,7 +198,7 @@ test.describe('hover effects', () => {
     await pop.hover();
     expect(await style(pop, 'transform')).toBe('none');
     await wiggle.hover();
-    expect(await style(wiggle.locator('.tipjar-icon'), 'animation-name')).toBe('none');
+    expect(await style(wiggle, 'animation-name')).toBe('none');
   });
 });
 
