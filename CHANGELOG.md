@@ -4,6 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+- A `compact: 'hover'` button no longer lifts as it opens; it only grows sideways.
+
 ## [1.1.0] - 2026-11-07
 
 - `compact: 'hover'` shows just the icon in a circle, and opens into the full button with the label sliding in on hover or keyboard focus. On touch screens it stays a circle.
