@@ -1,5 +1,5 @@
-import { type TipjarOptions, tipjar } from './tipjar.js';
 import { nudge } from './nudge.js';
+import { type TipjarOptions, tipjar } from './tipjar.js';
 import { type TuckTarget, tuck } from './tuck.js';
 
 /** Options for {@link mount}: everything {@link tipjar} takes, plus where to put it. */

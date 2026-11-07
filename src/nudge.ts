@@ -37,7 +37,10 @@ export function nudge(button: Element, seconds = 20): () => void {
   };
   function fire(): void {
     // Wait for the tab to come back, rather than wiggling where nobody can see it.
-    if (document.hidden) return document.addEventListener('visibilitychange', fire);
+    if (document.hidden) {
+      document.addEventListener('visibilitychange', fire);
+      return;
+    }
     stop();
     if (button.hasAttribute('data-tucked')) return;
     remember();
