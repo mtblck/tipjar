@@ -1,4 +1,5 @@
 import { type TipjarOptions, tipjar } from './tipjar.js';
+import { nudge } from './nudge.js';
 import { type TuckTarget, tuck } from './tuck.js';
 
 /** Options for {@link mount}: everything {@link tipjar} takes, plus where to put it. */
@@ -11,6 +12,11 @@ export interface MountOptions extends TipjarOptions {
    * Leave out to keep the button showing. See {@link tuck}.
    */
   hideWhenVisible?: TuckTarget;
+  /**
+   * Seconds to wait before one small wiggle to catch the eye, at most once per visit. Leave out
+   * for none. See {@link nudge}.
+   */
+  nudgeAfter?: number;
 }
 
 /** What {@link mount} returns. */
@@ -27,18 +33,20 @@ export interface Mounted {
  * @returns The button and a way to remove it.
  */
 export function mount(options: MountOptions): Mounted {
-  const { target, hideWhenVisible, ...rest } = options;
+  const { target, hideWhenVisible, nudgeAfter, ...rest } = options;
   const host = target ?? document.body;
   const holder = document.createElement('template');
   holder.innerHTML = tipjar(rest);
   const element = holder.content.firstElementChild as HTMLAnchorElement;
   host.append(element);
   const untuck = hideWhenVisible === undefined ? undefined : tuck(element, hideWhenVisible);
+  const unnudge = nudgeAfter === undefined ? undefined : nudge(element, nudgeAfter);
 
   return {
     element,
     destroy: () => {
       untuck?.();
+      unnudge?.();
       element.remove();
     },
   };
