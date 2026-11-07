@@ -53,7 +53,7 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `iconStyle` | `"flat"` | `flat`, `pixel` or `outline`. |
 | `position` | `"bottom-right"` | `bottom-left`, `top-right`, `top-left`, or `inline` to flow with the page. |
 | `compact` | `"auto"` | When to show only the icon: `auto` (under 600px wide), `always`, `never`, or `hover`: a circle that opens into the full button on hover or keyboard focus, and stays a circle on touch screens. |
-| `hover` | `"lift"` | The hover effect: `lift`, `pop` (a springy grow), `wiggle` (the icon tilts), `shine` (a highlight sweeps across), `fill` (a second colour wipes in) or `none`. |
+| `hover` | `"lift"` | What the whole button does on hover: `lift`, `pop` (a springy grow), `wiggle` (a quick tilt), `shine` (a highlight sweeps across), `fill` (a second colour wipes in) or `none`. The icon's own movement is `animate`. With `compact: 'hover'`, opening is the hover effect, so the button doesn't lift, pop or wiggle; shine and fill still play. |
 | `animate` | `"hover"` | When an icon's moving parts play (the heart's beat, the coffee's steam and so on): `hover` (also on keyboard focus), `loop` (three times when the page loads, and on hover) or `none`. |
 | `enter` | `"none"` | An entrance when the page loads: `fade`, `slide` or `pop`, after `--tipjar-enter-delay` (0.6s). |
 | `newTab` | `false` | Open the link in a new tab, with `rel="noopener"`. Screen readers hear the `newTabHint` after the label. |

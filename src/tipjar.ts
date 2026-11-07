@@ -10,7 +10,11 @@ export type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
  */
 export type Compact = 'auto' | 'always' | 'never' | 'hover';
 
-/** What the button does on hover: lift (the default), pop, wiggle its icon, shine, fill, or nothing. */
+/**
+ * What the whole button does on hover: lift (the default), pop, wiggle, shine, fill, or nothing. The
+ * icon's own moving part is `animate`. A `compact: 'hover'` button opens instead of lifting, popping
+ * or wiggling.
+ */
 export type Hover = 'lift' | 'pop' | 'wiggle' | 'shine' | 'fill' | 'none';
 
 /** When an icon's moving parts play: on hover or focus (the default), three times on load and on hover, or never. */
