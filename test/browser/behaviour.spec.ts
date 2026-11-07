@@ -168,7 +168,8 @@ test.describe('hover effects', () => {
   test('none of it moves with reduced motion', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await open(page, { buttons: [{ hover: 'pop' }, { hover: 'wiggle', position: 'inline' }] });
-    const [pop, wiggle] = await page.locator('.tipjar').all();
+    const pop = page.locator('.tipjar').first();
+    const wiggle = page.locator('.tipjar').nth(1);
     await pop.hover();
     expect(await style(pop, 'transform')).toBe('none');
     await wiggle.hover();
