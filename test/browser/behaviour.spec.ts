@@ -218,6 +218,36 @@ test.describe('animated icons', () => {
     expect(await parts(page)).toEqual(['none', 'none']);
   });
 
+  for (const [icon, animation] of [
+    ['heart', 'tipjar-beat'],
+    ['star', 'tipjar-spin'],
+    ['gift', 'tipjar-hop'],
+    ['sparkle', 'tipjar-twinkle'],
+    ['coin', 'tipjar-flip'],
+    ['tea', 'tipjar-swing'],
+    ['pizza', 'tipjar-hop'],
+    ['music', 'tipjar-rise'],
+  ] as const) {
+    test(`${icon} plays ${animation} on hover`, async ({ page }) => {
+      await open(page, { buttons: [{ icon }] });
+      await page.locator('.tipjar').hover();
+      expect(new Set(await parts(page))).toEqual(new Set([animation]));
+    });
+  }
+
+  test('pixel icons that would blur step instead', async ({ page }) => {
+    await open(page, {
+      buttons: [
+        { icon: 'star', iconStyle: 'pixel' },
+        { icon: 'tea', iconStyle: 'pixel', position: 'inline' },
+      ],
+    });
+    await page.locator('.tipjar').first().hover();
+    expect(await parts(page)).toEqual(['tipjar-beat', 'none']);
+    await page.locator('.tipjar').nth(1).hover();
+    expect(await parts(page)).toEqual(['none', 'tipjar-sway']);
+  });
+
   test('plays on keyboard focus', async ({ page }) => {
     await open(page, { buttons: [{ icon: 'jar' }] });
     await page.keyboard.press('Tab');

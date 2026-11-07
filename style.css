@@ -325,6 +325,7 @@ svg.tipjar-icon,
    cell per step, travel as far as the others. */
 .tipjar-part {
   color: var(--tipjar-accent, currentColor);
+  transform-origin: center;
 }
 .tipjar-steam {
   --_part: tipjar-rise 1.8s;
@@ -335,11 +336,59 @@ svg.tipjar-icon,
 .tipjar-coin {
   --_part: tipjar-drop 1.6s;
 }
+.tipjar-note {
+  --_part: tipjar-rise 2.2s;
+}
+.tipjar-beat {
+  --_part: tipjar-beat 1.2s;
+}
+.tipjar-spin {
+  --_part: tipjar-spin 2s;
+  /* The star's own centre, so a fifth of a turn lands it back on itself. */
+  transform-origin: 50% 51.9%;
+}
+.tipjar-lid,
+.tipjar-pull {
+  --_part: tipjar-hop 1.4s;
+}
+.tipjar-pull {
+  --_hop: 16.667%;
+}
+.tipjar-twinkle {
+  --_part: tipjar-twinkle 1.4s;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.tipjar-twinkle ~ .tipjar-twinkle {
+  --_part-wait: 0.7s;
+}
+.tipjar-flip {
+  --_part: tipjar-flip 1.6s;
+}
+.tipjar-tag {
+  --_part: tipjar-swing 1.6s;
+  /* Where the string meets the cup. */
+  transform-origin: 43.75% 36.5%;
+}
 .tipjar-step.tipjar-steam {
   --_part-ease: steps(6);
 }
 .tipjar-step.tipjar-coin {
   --_part-ease: steps(3);
+}
+.tipjar-step.tipjar-note {
+  --_part-ease: steps(6);
+}
+.tipjar-step:is(.tipjar-lid, .tipjar-pull) {
+  --_part-ease: steps(2);
+}
+/* A pixel star can't turn without blurring, so it pulses; a pixel tag sways a cell instead. */
+.tipjar-step.tipjar-spin {
+  --_part: tipjar-beat 1.2s;
+}
+.tipjar-step.tipjar-tag {
+  --_part: tipjar-sway 1.6s;
+  --_part-ease: steps(1);
 }
 .tipjar[data-animate="loop"] .tipjar-part {
   animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) 3;
@@ -350,6 +399,68 @@ svg.tipjar-icon,
 @media (hover: hover) {
   .tipjar:not([data-animate="none"]):hover .tipjar-part {
     animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) infinite;
+  }
+}
+/* Heart: two beats and a rest. */
+@keyframes tipjar-beat {
+  15% {
+    scale: 1.14;
+  }
+  30% {
+    scale: 1;
+  }
+  45% {
+    scale: 1.08;
+  }
+  60% {
+    scale: 1;
+  }
+}
+@keyframes tipjar-spin {
+  50%,
+  100% {
+    rotate: 72deg;
+  }
+}
+/* Gift lid up, pizza slice down: two pixel-icon cells, and back. */
+@keyframes tipjar-hop {
+  25% {
+    translate: 0 var(--_hop, -16.667%);
+  }
+  50% {
+    translate: 0 0;
+  }
+}
+@keyframes tipjar-twinkle {
+  40% {
+    scale: 0.3;
+    opacity: 0.5;
+  }
+  80% {
+    scale: 1;
+    opacity: 1;
+  }
+}
+@keyframes tipjar-flip {
+  60%,
+  100% {
+    scale: -1 1;
+  }
+}
+@keyframes tipjar-swing {
+  25% {
+    rotate: 14deg;
+  }
+  75% {
+    rotate: -10deg;
+  }
+}
+@keyframes tipjar-sway {
+  25% {
+    translate: 8.333% 0;
+  }
+  75% {
+    translate: -8.333% 0;
   }
 }
 /* Steam rises and fades, then wells up again from inside the cup. */

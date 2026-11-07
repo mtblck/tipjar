@@ -2,9 +2,9 @@
 
 A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. It sits in a corner of the page, folds to just its icon on a phone, and can tuck itself away when your footer, with its own support link, scrolls into view.
 
-- **Zero dependencies, about 10 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
+- **Zero dependencies, about 12 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
 - **Works under a strict CSP.** No inline scripts, and no inline styles unless you ask for them. Theme it with CSS custom properties.
-- **Its own icons.** Heart, coffee, star, gift, sparkle and jar, each drawn flat, pixel or outline, all in `currentColor`, and some with moving parts. Or bring your own SVG.
+- **Its own icons.** Ten of them, each drawn flat, pixel or outline, all in `currentColor`, and each with a part that moves on hover. Or bring your own SVG.
 - **Accessible.** A real link with a name that includes its visible text, a 44px target, a visible focus ring, and no motion for people who ask for less.
 
 ![Three tipjar buttons on a light page: "Support" with a heart, "Buy me a coffee" with a pixel cup, and a compact star](docs/images/theme-light.png)
@@ -49,12 +49,12 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `href` | (required) | http, https, mailto or a relative URL. Anything else throws, so the button can't run script. |
 | `label` | `"Support"` | The visible text. |
 | `description` | none | Extra words for screen readers, read after the label. |
-| `icon` | `"heart"` | `heart`, `coffee`, `star`, `gift`, `sparkle`, `jar`; `false` for none; or `{ svg: '<svg…>' }` for your own. Custom SVG is inserted as is, so only pass markup you trust. |
+| `icon` | `"heart"` | `heart`, `coffee`, `star`, `gift`, `sparkle`, `jar`, `coin`, `tea`, `pizza`, `music`; `false` for none; or `{ svg: '<svg…>' }` for your own. Custom SVG is inserted as is, so only pass markup you trust. |
 | `iconStyle` | `"flat"` | `flat`, `pixel` or `outline`. |
 | `position` | `"bottom-right"` | `bottom-left`, `top-right`, `top-left`, or `inline` to flow with the page. |
 | `compact` | `"auto"` | When to show only the icon: `auto` (under 600px wide), `always`, `never`, or `hover`: a circle that opens into the full button on hover or keyboard focus, and stays a circle on touch screens. |
 | `hover` | `"lift"` | The hover effect: `lift`, `pop` (a springy grow), `wiggle` (the icon tilts), `shine` (a highlight sweeps across), `fill` (a second colour wipes in) or `none`. |
-| `animate` | `"hover"` | When an icon's moving parts play (coffee's steam, jar's coin): `hover` (also on keyboard focus), `loop` (three times when the page loads, and on hover) or `none`. |
+| `animate` | `"hover"` | When an icon's moving parts play (the heart's beat, the coffee's steam and so on): `hover` (also on keyboard focus), `loop` (three times when the page loads, and on hover) or `none`. |
 | `enter` | `"none"` | An entrance when the page loads: `fade`, `slide` or `pop`, after `--tipjar-enter-delay` (0.6s). |
 | `newTab` | `false` | Open the link in a new tab, with `rel="noopener"`. Screen readers hear the `newTabHint` after the label. |
 | `newTabHint` | `"(opens in a new tab)"` | With `newTab`, words read to screen readers so people know a tab will open. Translate it, or `''` for none. |
@@ -81,13 +81,13 @@ A tucked button gets `data-tucked`, which hides it and takes it out of the tab o
 
 ## Icons
 
-Six icons, each drawn three ways, all in `currentColor`:
+Ten icons, each drawn three ways, all in `currentColor`:
 
-![heart, coffee, star, gift, sparkle and jar, each drawn flat, pixel and outline](docs/images/icons.png)
+![heart, coffee, star, gift, sparkle, jar, coin, tea, pizza and music, each drawn flat, pixel and outline](docs/images/icons.png)
 
 Pixel icons sit on a 12×12 grid, so they're sharpest at 12, 24 or 48px. At the default 16px each cell is a pixel and a third, so on a sharp-edged pixel icon the steps come out a little uneven; set `--tipjar-icon-size: 24px` if you use them.
 
-Coffee and jar have moving parts: steam rises from the cup and drifts up past the button's edge, and a coin drops into the jar. They play on hover by default; see `animate`. In a compact button, a bigger icon such as `--tipjar-icon-size: 28px` shows them off, and `--tipjar-accent` colours them.
+Every icon has a moving part, which plays on hover by default (see `animate`): the heart beats, steam rises from the coffee and drifts up past the button's edge, the star turns, the gift's lid hops, the small sparkles twinkle, a coin drops into the jar, the coin flips, the tea bag's tag swings, the pizza slice pulls away, and a note floats up from the music. Pixel icons move a whole cell at a time, so a pixel star pulses instead of turning, and a pixel tag sways. In a compact button, a bigger icon such as `--tipjar-icon-size: 28px` shows them off, and `--tipjar-accent` colours the moving parts.
 
 `icon(name, style)` returns a single icon as an SVG string, and `ICON_NAMES` and `ICON_STYLES` list them.
 
