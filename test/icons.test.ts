@@ -22,7 +22,15 @@ describe('icon', () => {
     expect(icon('jar', 'outline')).toMatch(/<path class="tipjar-part tipjar-coin" d="[^"]+"\/><\/svg>$/);
     // Pixel parts step a whole cell at a time.
     expect(icon('jar', 'pixel')).toContain('class="tipjar-part tipjar-coin tipjar-step"');
-    expect(icon('heart', 'flat')).not.toContain('tipjar-part');
+  });
+
+  it('gives every icon a moving part, and draws no empty paths', () => {
+    for (const name of ICON_NAMES) {
+      for (const style of ICON_STYLES) {
+        expect(icon(name, style)).toContain('tipjar-part');
+        expect(icon(name, style)).not.toMatch(/d=""/);
+      }
+    }
   });
 
   it('defaults to flat', () => {

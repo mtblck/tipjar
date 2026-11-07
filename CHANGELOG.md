@@ -10,7 +10,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 - **Look change:** the button squishes slightly while pressed, on every device.
 - A new `jar` icon, drawn flat, pixel and outline, with a coin that drops in.
 - Icons can have moving parts, played by the new `animate` option: on `hover` (the default, and on keyboard focus), `loop` (three times on load, and on hover) or `none`. Coffee's steam rises past the edge of the button, and jar's coin drops in. `--tipjar-accent` colours the moving parts.
-- **Look change:** the coffee icon's steam now rises on hover. Its still drawing is unchanged; pass `animate: 'none'` to keep it still.
+- Four new icons, drawn flat, pixel and outline: `coin` (flips), `tea` (the tag swings), `pizza` (the slice pulls away) and `music` (a note floats up).
+- **Look change:** every 1.0 icon now moves on hover: the heart beats, the coffee steams, the star turns (a pixel star pulses), the gift's lid hops and the small sparkles twinkle. Their still drawings are unchanged; pass `animate: 'none'` to keep them still.
 - Reduced motion now also turns off every new effect, and wins over a site's own transitions on the button.
 
 ## [1.0.0] - 2026-11-02
