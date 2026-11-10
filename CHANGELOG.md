@@ -4,6 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-10
+
 - **Breaking, look change:** four icons are redrawn, each with a new animation. `coin` is a coin that spins on its edge, slows, and catches a shine; a pixel coin turns through frames. `tea` has the bag's string over the rim and its tag hanging outside the cup, swaying. `pizza` is a whole pie with one slice sliding out. `music` is two beamed notes that bop to a beat.
 - **Breaking, look change:** the coffee's steam is drawn as curly wisps (flat and outline; pixel is unchanged). It no longer rises past the button's edge: it sways, drifts a little and fades in and out over the cup.
 - **Look change:** the big sparkle now glimmers too, on a slower beat than the two small ones. Its drawing is unchanged.
@@ -45,7 +47,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 - First version: `tipjar()`, `mount()`, `icon()`, `style.css`, and five icons (heart, coffee, star, gift, sparkle) drawn flat, pixel and outline.
 
-[Unreleased]: https://github.com/mtblck/tipjar/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/mtblck/tipjar/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/mtblck/tipjar/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/mtblck/tipjar/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mtblck/tipjar/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/mtblck/tipjar/compare/v0.1.0...v1.0.0
