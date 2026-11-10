@@ -4,6 +4,10 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+- **Breaking, look change:** four icons are redrawn, each with a new animation. `coin` is a coin that spins on its edge, slows, and catches a shine; a pixel coin turns through frames. `tea` has the bag's string over the rim and its tag hanging outside the cup, swaying. `pizza` is a whole pie with one slice sliding out. `music` is two beamed notes that bop to a beat.
+- **Breaking, look change:** the coffee's steam is drawn as curly wisps (flat and outline; pixel is unchanged). It no longer rises past the button's edge: it sways, drifts a little and fades in and out over the cup.
+- **Look change:** the big sparkle now glimmers too, on a slower beat than the two small ones. Its drawing is unchanged.
+
 ## [1.2.0] - 2026-11-07
 
 - A `compact: 'hover'` button no longer lifts as it opens; it only grows sideways. It doesn't pop or wiggle either: opening is its hover effect. Shine and fill still play.

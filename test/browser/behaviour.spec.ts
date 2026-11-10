@@ -234,11 +234,11 @@ test.describe('animated icons', () => {
   const parts = (page: import('@playwright/test').Page) =>
     page.locator('.tipjar-part').evaluateAll((els) => els.map((el) => getComputedStyle(el).animationName));
 
-  test('steam rises from the coffee on hover, and stops after', async ({ page }) => {
+  test('steam wafts over the coffee on hover, and stops after', async ({ page }) => {
     await open(page, { buttons: [{ icon: 'coffee' }] });
     expect(await parts(page)).toEqual(['none', 'none']);
     await page.locator('.tipjar').hover();
-    expect(await parts(page)).toEqual(['tipjar-rise', 'tipjar-rise']);
+    expect(await parts(page)).toEqual(['tipjar-waft', 'tipjar-waft']);
     await page.mouse.move(0, 0);
     expect(await parts(page)).toEqual(['none', 'none']);
   });
@@ -247,16 +247,16 @@ test.describe('animated icons', () => {
     ['heart', 'tipjar-beat'],
     ['star', 'tipjar-spin'],
     ['gift', 'tipjar-hop'],
-    ['sparkle', 'tipjar-twinkle'],
-    ['coin', 'tipjar-flip'],
-    ['tea', 'tipjar-swing'],
-    ['pizza', 'tipjar-hop'],
-    ['music', 'tipjar-rise'],
+    ['sparkle', 'tipjar-glint tipjar-twinkle tipjar-twinkle'],
+    ['coin', 'tipjar-turn tipjar-shine'],
+    ['tea', 'tipjar-dangle'],
+    ['pizza', 'tipjar-serve'],
+    ['music', 'tipjar-bop'],
   ] as const) {
     test(`${icon} plays ${animation} on hover`, async ({ page }) => {
       await open(page, { buttons: [{ icon }] });
       await page.locator('.tipjar').hover();
-      expect(new Set(await parts(page))).toEqual(new Set([animation]));
+      expect((await parts(page)).join(' ')).toBe(animation);
     });
   }
 
@@ -270,7 +270,16 @@ test.describe('animated icons', () => {
     await page.locator('.tipjar').first().hover();
     expect(await parts(page)).toEqual(['tipjar-beat', 'none']);
     await page.locator('.tipjar').nth(1).hover();
-    expect(await parts(page)).toEqual(['none', 'tipjar-sway']);
+    expect(await parts(page)).toEqual(['none', 'tipjar-dangle-step']);
+  });
+
+  test('a pixel coin turns through its frames, which rest hidden', async ({ page }) => {
+    await open(page, { buttons: [{ icon: 'coin', iconStyle: 'pixel' }] });
+    const opacity = () =>
+      page.locator('[class*="tipjar-turn-"]').evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity));
+    expect(await opacity()).toEqual(['0', '0']);
+    await page.locator('.tipjar').hover();
+    expect(await parts(page)).toEqual(['tipjar-turn-0', 'tipjar-shine', 'tipjar-turn-1', 'tipjar-turn-2']);
   });
 
   test('plays on keyboard focus', async ({ page }) => {
@@ -297,7 +306,7 @@ test.describe('animated icons', () => {
     expect(await parts(page)).toEqual(['none', 'none']);
   });
 
-  test('steam can rise past the button, which does not clip it', async ({ page }) => {
+  test('moving parts can reach past the button, which does not clip them', async ({ page }) => {
     await open(page, { buttons: [{ icon: 'coffee', compact: 'always' }] });
     expect(await style(page.locator('svg.tipjar-icon'), 'overflow')).toBe('visible');
     expect(await style(page.locator('.tipjar'), 'overflow')).toBe('visible');
@@ -311,7 +320,7 @@ test.describe('nudge', () => {
     await expect(button).toHaveAttribute('data-nudge', '');
     expect(await style(button, 'animation-name')).toBe('tipjar-nudge');
     const steam = page.locator('.tipjar-steam').first();
-    expect(await style(steam, 'animation-name')).toBe('tipjar-rise');
+    expect(await style(steam, 'animation-name')).toBe('tipjar-waft');
     expect(await style(steam, 'animation-iteration-count')).toBe('1');
   });
 

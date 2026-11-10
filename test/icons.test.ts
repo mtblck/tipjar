@@ -18,10 +18,17 @@ describe('icon', () => {
   });
 
   it('draws moving parts last, with a class that names their animation', () => {
-    expect(icon('coffee', 'flat')).toMatch(/(<path class="tipjar-part tipjar-steam" d="[^"]+"\/>){2}<\/svg>$/);
+    expect(icon('coffee', 'flat')).toMatch(/(<path class="tipjar-part tipjar-steam" [^>]+\/>){2}<\/svg>$/);
     expect(icon('jar', 'outline')).toMatch(/<path class="tipjar-part tipjar-coin" d="[^"]+"\/><\/svg>$/);
     // Pixel parts step a whole cell at a time.
     expect(icon('jar', 'pixel')).toContain('class="tipjar-part tipjar-coin tipjar-step"');
+  });
+
+  it("adds a pixel part's frames after the parts, numbered from 1", () => {
+    expect(icon('coin', 'pixel')).toMatch(
+      /class="tipjar-part tipjar-shine tipjar-step"[^>]+\/><path class="tipjar-part tipjar-turn-1 tipjar-step" d="[^"]+"\/><path class="tipjar-part tipjar-turn-2 tipjar-step" d="[^"]+"\/><\/svg>$/,
+    );
+    expect(icon('coin', 'flat')).not.toContain('tipjar-turn-1');
   });
 
   it('gives every icon a moving part, and draws no empty paths', () => {

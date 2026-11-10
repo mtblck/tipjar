@@ -59,10 +59,19 @@ export function icon(name: IconName, style: IconStyle = 'flat'): string {
     (drawing.parts ?? [])
       .map((part) => `<path class="tipjar-part tipjar-${part.name}${extra}" ${draw(part)}/>`)
       .join('');
+  // A pixel part that can't move without blurring may have frames instead, shown in turn.
+  const frames = (): string =>
+    (drawing.parts ?? [])
+      .flatMap((part) =>
+        (part.frames ?? []).map(
+          (rows, n) => `<path class="tipjar-part tipjar-${part.name}-${n + 1} tipjar-step" d="${pixelPath(rows)}"/>`,
+        ),
+      )
+      .join('');
   const body = (d: string): string => (d ? `<path d="${d}"/>` : '');
   if (style === 'pixel') {
     const moving = parts((part) => `d="${pixelPath(part.pixel)}"`, ' tipjar-step');
-    return `${open} viewBox="0 0 12 12" shape-rendering="crispEdges" fill="currentColor">${body(pixelPath(drawing.pixel))}${moving}</svg>`;
+    return `${open} viewBox="0 0 12 12" shape-rendering="crispEdges" fill="currentColor">${body(pixelPath(drawing.pixel))}${moving}${frames()}</svg>`;
   }
   if (style === 'outline') {
     const pen = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
