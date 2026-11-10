@@ -87,7 +87,7 @@ Ten icons, each drawn three ways, all in `currentColor`:
 
 Pixel icons sit on a 12×12 grid, so they're sharpest at 12, 24 or 48px. At the default 16px each cell is a pixel and a third, so on a sharp-edged pixel icon the steps come out a little uneven; set `--tipjar-icon-size: 24px` if you use them.
 
-Every icon has a moving part, which plays on hover by default (see `animate`): the heart beats, steam rises from the coffee and drifts up past the button's edge, the star turns, the gift's lid hops, the small sparkles twinkle, a coin drops into the jar, the coin flips, the tea bag's tag swings, the pizza slice pulls away, and a note floats up from the music. Pixel icons move a whole cell at a time, so a pixel star pulses instead of turning, and a pixel tag sways. In a compact button, a bigger icon such as `--tipjar-icon-size: 28px` shows them off, and `--tipjar-accent` colours the moving parts.
+Every icon has a moving part, which plays on hover by default (see `animate`): the heart beats, wisps of steam sway over the coffee, the star turns, the gift's lid hops, the sparkles twinkle (the big one on its own, slower beat), a coin drops into the jar, the coin spins on its edge and shines, the tea bag's tag sways over the side of the cup, a slice slides out of the pizza, and the music's notes bop to a beat. Pixel icons move a whole cell at a time, so a pixel star pulses instead of turning, and a pixel coin turns through frames. In a compact button, a bigger icon such as `--tipjar-icon-size: 28px` shows them off, and `--tipjar-accent` colours the moving parts.
 
 `icon(name, style)` returns a single icon as an SVG string, and `ICON_NAMES` and `ICON_STYLES` list them.
 

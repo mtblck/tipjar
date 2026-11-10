@@ -1,6 +1,6 @@
 // The first five icons, as drawn in 1.0, now in moving parts. See drawing.ts.
 import type { Drawing } from './drawing.js';
-import { from, soft, solid } from './drawing.js';
+import { from, solid } from './drawing.js';
 
 const HEART =
   'M12 20.5s-8-4.9-10-10C.6 6.8 3.2 3.5 6.7 3.5c2.2 0 4 1.2 5.3 3 1.3-1.8 3.1-3 5.3-3 3.5 0 6.1 3.3 4.7 7-2 5.1-10 10-10 10z';
@@ -52,16 +52,19 @@ export const FIRST_DRAWINGS = {
       '###########.',
     ]),
     parts: [
+      // Wisps: an S-curve there and back, which the round stroke draws as a line.
       {
         name: 'steam',
-        flat: 'M7 3.5a1 1 0 0 1 2 0v3a1 1 0 0 1-2 0z',
-        outline: 'M8 3v3',
+        flat: 'M8 7c-1.4-1.125 1.4-2.25 0-4.5c1.4 2.25-1.4 3.375 0 4.5z',
+        soften: 1.6,
+        outline: 'M8 7c-1.4-1.1 1.4-2.2 0-3.6',
         pixel: ['...#', '..#.', '...#'],
       },
       {
         name: 'steam',
-        flat: 'M11 2.5a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0z',
-        outline: 'M12 3v3',
+        flat: 'M12 7c-1.4-1.375 1.4-2.75 0-5.5c1.4 2.75-1.4 4.125 0 5.5z',
+        soften: 1.6,
+        outline: 'M12 7c-1.4-1.4 1.4-2.8 0-4.4',
         pixel: ['......#', '.....#.', '......#'],
       },
     ],
@@ -106,20 +109,27 @@ export const FIRST_DRAWINGS = {
     ],
   },
   sparkle: {
-    flat: soft(SPARK, 1),
-    outline: SPARK,
-    pixel: from(1, [
-      '....#.......',
-      '....#.......',
-      '...###......',
-      '..#####.....',
-      '#########...',
-      '..#####.....',
-      '...###......',
-      '....#.......',
-      '....#.......',
-    ]),
+    flat: '',
+    outline: '',
+    pixel: [],
     parts: [
+      {
+        name: 'glint',
+        flat: SPARK,
+        soften: 1,
+        outline: SPARK,
+        pixel: from(1, [
+          '....#.......',
+          '....#.......',
+          '...###......',
+          '..#####.....',
+          '#########...',
+          '..#####.....',
+          '...###......',
+          '....#.......',
+          '....#.......',
+        ]),
+      },
       {
         name: 'twinkle',
         flat: `M18.5 2.5${TWINKLE}`,

@@ -88,7 +88,7 @@
   width: 100%;
   height: 100%;
 }
-/* Moving parts, such as steam, may rise past the icon's box and the button's edge. */
+/* Moving parts, such as a sliding pizza slice or the coin's shine, may reach past the icon and the button. */
 svg.tipjar-icon,
 .tipjar-icon > svg {
   overflow: visible;
@@ -330,17 +330,25 @@ svg.tipjar-icon,
   color: var(--tipjar-accent, currentColor);
   transform-origin: center;
 }
+/* Parts that turn, squash or bend do it about their own box, not the icon's. */
+.tipjar-steam,
+.tipjar-glint,
+.tipjar-twinkle,
+.tipjar-turn,
+.tipjar-shine,
+.tipjar-bop {
+  transform-box: fill-box;
+}
+/* Coffee: each wisp bends from its foot and lingers over the cup. */
 .tipjar-steam {
-  --_part: tipjar-rise 1.8s;
+  --_part: tipjar-waft 2.4s;
+  transform-origin: 50% 100%;
 }
 .tipjar-steam ~ .tipjar-steam {
-  --_part-wait: 0.5s;
+  --_part-wait: 0.6s;
 }
 .tipjar-coin {
   --_part: tipjar-drop 1.6s;
-}
-.tipjar-note {
-  --_part: tipjar-rise 2.2s;
 }
 .tipjar-beat {
   --_part: tipjar-beat 1.2s;
@@ -350,47 +358,87 @@ svg.tipjar-icon,
   /* The star's own centre, so a fifth of a turn lands it back on itself. */
   transform-origin: 50% 51.9%;
 }
-.tipjar-lid,
-.tipjar-pull {
+.tipjar-lid {
   --_part: tipjar-hop 1.4s;
 }
-.tipjar-pull {
-  --_hop: 16.667%;
+/* Sparkle: the big one glimmers on a slower beat than the small ones, so they drift in and out
+   of step. */
+.tipjar-glint {
+  --_part: tipjar-glint 1.9s;
+  --_part-wait: 0.3s;
 }
 .tipjar-twinkle {
   --_part: tipjar-twinkle 1.4s;
-  transform-box: fill-box;
-  transform-origin: center;
 }
 .tipjar-twinkle ~ .tipjar-twinkle {
   --_part-wait: 0.7s;
 }
-.tipjar-flip {
-  --_part: tipjar-flip 1.6s;
+.tipjar-turn {
+  --_part: tipjar-turn 2s;
+  --_part-ease: linear;
 }
-.tipjar-tag {
-  --_part: tipjar-swing 1.6s;
-  /* Where the string meets the cup. */
-  transform-origin: 43.75% 36.5%;
+.tipjar-shine {
+  --_part: tipjar-shine 2s;
 }
+.tipjar-dangle {
+  --_part: tipjar-dangle 2s;
+  /* Where the string crosses the rim. */
+  transform-origin: 33.333% 33.333%;
+}
+.tipjar-serve {
+  --_part: tipjar-serve 1.8s;
+  /* The middle of the pie. */
+  transform-origin: 45.833% 54.167%;
+}
+.tipjar-bop {
+  --_part: tipjar-bop 1.6s;
+  transform-origin: 50% 100%;
+}
+/* Pixel parts that would blur step a whole cell instead, or show frames. */
 .tipjar-step.tipjar-steam {
-  --_part-ease: steps(6);
+  --_part: tipjar-waft-step 2.4s;
+  --_part-ease: steps(1);
+  transform-origin: center;
 }
 .tipjar-step.tipjar-coin {
   --_part-ease: steps(3);
 }
-.tipjar-step.tipjar-note {
-  --_part-ease: steps(6);
-}
-.tipjar-step:is(.tipjar-lid, .tipjar-pull) {
+.tipjar-step.tipjar-lid {
   --_part-ease: steps(2);
 }
-/* A pixel star can't turn without blurring, so it pulses; a pixel tag sways a cell instead. */
+/* A pixel star can't turn without blurring, so it pulses; nor can the big sparkle. */
 .tipjar-step.tipjar-spin {
   --_part: tipjar-beat 1.2s;
 }
-.tipjar-step.tipjar-tag {
-  --_part: tipjar-sway 1.6s;
+.tipjar-step.tipjar-glint {
+  --_part: tipjar-glint-step 1.9s;
+}
+/* A pixel coin turns through its frames: three quarters on, then edge on. */
+.tipjar-step.tipjar-turn {
+  --_part: tipjar-turn-0 2s;
+  --_part-ease: steps(1);
+}
+.tipjar-turn-1,
+.tipjar-turn-2 {
+  opacity: 0;
+  --_part-ease: steps(1);
+}
+.tipjar-turn-1 {
+  --_part: tipjar-turn-1 2s;
+}
+.tipjar-turn-2 {
+  --_part: tipjar-turn-2 2s;
+}
+.tipjar-step.tipjar-dangle {
+  --_part: tipjar-dangle-step 2s;
+  --_part-ease: steps(1);
+}
+.tipjar-step.tipjar-serve {
+  --_part: tipjar-serve-step 1.8s;
+  --_part-ease: steps(1);
+}
+.tipjar-step.tipjar-bop {
+  --_part: tipjar-bop-step 1.6s;
   --_part-ease: steps(1);
 }
 .tipjar[data-animate="loop"] .tipjar-part {
@@ -447,13 +495,56 @@ svg.tipjar-icon,
     rotate: 72deg;
   }
 }
-/* Gift lid up, pizza slice down: two pixel-icon cells, and back. */
+/* Gift lid up two pixel-icon cells, and back. */
 @keyframes tipjar-hop {
   25% {
-    translate: 0 var(--_hop, -16.667%);
+    translate: 0 -16.667%;
   }
   50% {
     translate: 0 0;
+  }
+}
+/* Steam leans one way and the other, drifts up a little and breathes, but stays over the cup. */
+@keyframes tipjar-waft {
+  25% {
+    transform: translateY(-0.8px) skewX(-14deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-1.4px) skewX(8deg) scaleY(1.12);
+    opacity: 0.85;
+  }
+  75% {
+    transform: translateY(-0.6px) skewX(12deg);
+    opacity: 0.5;
+  }
+}
+/* A pixel wisp flips its zigzag from side to side. */
+@keyframes tipjar-waft-step {
+  25% {
+    scale: -1 1;
+    opacity: 0.6;
+  }
+  50% {
+    scale: 1 1;
+    opacity: 0.85;
+  }
+  75% {
+    scale: -1 1;
+    opacity: 0.5;
+  }
+}
+@keyframes tipjar-glint {
+  50% {
+    scale: 0.62;
+    rotate: 12deg;
+    opacity: 0.75;
+  }
+}
+@keyframes tipjar-glint-step {
+  50% {
+    scale: 0.6;
+    opacity: 0.75;
   }
 }
 @keyframes tipjar-twinkle {
@@ -466,40 +557,152 @@ svg.tipjar-icon,
     opacity: 1;
   }
 }
-@keyframes tipjar-flip {
-  60%,
+/* Coin: spins on its edge three times, slowing, then settles and shines. It goes edge on at 10%,
+   32% and 60%; the pixel frames below follow the same beat. */
+@keyframes tipjar-turn {
+  20% {
+    scale: -1 1;
+  }
+  44% {
+    scale: 1 1;
+  }
+  76%,
   100% {
     scale: -1 1;
   }
 }
-@keyframes tipjar-swing {
-  25% {
-    rotate: 14deg;
+@keyframes tipjar-turn-0 {
+  5%,
+  26%,
+  52% {
+    opacity: 0;
   }
-  75% {
-    rotate: -10deg;
-  }
-}
-@keyframes tipjar-sway {
-  25% {
-    translate: 8.333% 0;
-  }
-  75% {
-    translate: -8.333% 0;
-  }
-}
-/* Steam rises and fades, then wells up again from inside the cup. */
-@keyframes tipjar-rise {
-  35% {
+  20%,
+  44%,
+  76% {
     opacity: 1;
   }
-  60% {
-    translate: 0 -50%;
+}
+@keyframes tipjar-turn-1 {
+  5%,
+  15%,
+  26%,
+  38%,
+  52%,
+  68% {
+    opacity: 1;
+  }
+  0%,
+  10%,
+  20%,
+  32%,
+  44%,
+  60%,
+  76%,
+  100% {
     opacity: 0;
   }
-  60.01% {
-    translate: 0 50%;
+}
+@keyframes tipjar-turn-2 {
+  10%,
+  32%,
+  60% {
+    opacity: 1;
+  }
+  0%,
+  15%,
+  38%,
+  68%,
+  100% {
     opacity: 0;
+  }
+}
+@keyframes tipjar-shine {
+  0%,
+  76% {
+    scale: 0;
+    opacity: 0;
+  }
+  86% {
+    scale: 1.3;
+    opacity: 1;
+  }
+}
+/* Tea: the tag sways on its string, mostly away from the cup. */
+@keyframes tipjar-dangle {
+  30% {
+    rotate: 14deg;
+  }
+  70% {
+    rotate: -5deg;
+  }
+}
+@keyframes tipjar-dangle-step {
+  30%,
+  60% {
+    translate: -8.333% 0;
+  }
+  0%,
+  100% {
+    translate: 0 0;
+  }
+}
+/* Pizza: a slice slides out of the pie, tilts, and goes back. */
+@keyframes tipjar-serve {
+  40%,
+  60% {
+    translate: 6% -6%;
+    rotate: 8deg;
+  }
+}
+@keyframes tipjar-serve-step {
+  30%,
+  70% {
+    translate: 8.333% -8.333%;
+  }
+  0%,
+  100% {
+    translate: 0 0;
+  }
+}
+/* Music: the notes dip and rock left, dip and rock right. */
+@keyframes tipjar-bop {
+  12.5% {
+    scale: 1.06 0.9;
+    rotate: 0deg;
+  }
+  25% {
+    scale: 1;
+    rotate: -8deg;
+  }
+  50% {
+    rotate: 0deg;
+  }
+  62.5% {
+    scale: 1.06 0.9;
+  }
+  75% {
+    scale: 1;
+    rotate: 8deg;
+  }
+}
+@keyframes tipjar-bop-step {
+  12.5%,
+  62.5% {
+    scale: 1 0.9;
+  }
+  25%,
+  37.5% {
+    scale: 1;
+    translate: -8.333% 0;
+  }
+  50%,
+  100% {
+    translate: 0 0;
+  }
+  75%,
+  87.5% {
+    translate: 8.333% 0;
   }
 }
 /* A coin falls in from above, rests where it's drawn, then drops into the jar. */

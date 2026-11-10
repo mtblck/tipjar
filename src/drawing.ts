@@ -14,6 +14,11 @@ export interface Part {
   outline: string;
   /** Rows of the 12x12 pixel grid, from the top; `#` is filled. */
   pixel: readonly string[];
+  /**
+   * Pixel only: more drawings of the part, hidden until its animation shows them one at a time.
+   * Frame `n` (from 1) has the class `tipjar-<name>-<n>`.
+   */
+  frames?: readonly (readonly string[])[];
 }
 
 /** One icon, in each style. Its parts, drawn after it, complete the still picture. */
@@ -27,15 +32,6 @@ export interface Drawing {
   /** Moving parts, if any. */
   parts?: readonly Part[];
 }
-
-/**
- * A flat shape that is just a filled outline, with a same-colour round stroke to soften its points.
- * @param d - Path data.
- * @param width - The stroke's width.
- * @returns A `<path>` element.
- */
-export const soft = (d: string, width = 1.5): string =>
-  `<path fill="currentColor" stroke="currentColor" stroke-width="${width}" stroke-linejoin="round" d="${d}"/>`;
 
 /**
  * A flat, filled shape.
