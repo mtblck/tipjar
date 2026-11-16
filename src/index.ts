@@ -3,6 +3,7 @@
  * @packageDocumentation
  * @document ../docs/recipes.md
  */
+export { type GithubStarsOptions, githubStars } from './github.js';
 export { ICON_NAMES, ICON_STYLES, type IconName, type IconStyle, icon } from './icons.js';
 export { type Mounted, type MountOptions, mount } from './mount.js';
 export { nudge } from './nudge.js';

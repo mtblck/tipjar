@@ -4,6 +4,9 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+- A `count` option shows a number after the label, in a small pill: numbers are shortened the way GitHub does (`1,204`, `12.3k`, `1.2M`), and a string is shown as is. `--tipjar-count-bg` and `--tipjar-count-label` colour it.
+- `githubStars('owner/name')` asks GitHub how many stars a repo has, for a "Star on GitHub" button. It caches the count in `sessionStorage` for an hour, takes a `token` for build servers, and resolves to `undefined` instead of throwing when GitHub can't answer.
+
 ## [2.0.0] - 2026-11-10
 
 - **Breaking, look change:** four icons are redrawn, each with a new animation. `coin` is a coin that spins on its edge, slows, and catches a shine; a pixel coin turns through frames. `tea` has the bag's string over the rim and its tag hanging outside the cup, swaying. `pizza` is a whole pie with one slice sliding out. `music` is two beamed notes that bop to a beat.

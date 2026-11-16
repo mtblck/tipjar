@@ -1,3 +1,4 @@
+import { countMarkup } from './count.js';
 import { escapeHtml, safeCss, safeHref } from './escape.js';
 import { icon as drawIcon, type IconName, type IconStyle } from './icons.js';
 
@@ -43,6 +44,11 @@ export interface TipjarOptions {
   label?: string;
   /** Extra words for screen readers, read after the label, such as "this project on Ko-fi". */
   description?: string;
+  /**
+   * A number shown after the label, such as a repo's stars from {@link githubStars}. Numbers are
+   * shortened the way GitHub does (1,204, 12.3k); text is shown as is. Leave out for none.
+   */
+  count?: number | string;
   /** A built-in icon, `false` for none, or `{ svg }` with your own trusted SVG markup. Defaults to heart. */
   icon?:
     | IconName
@@ -144,6 +150,6 @@ export function tipjar(options: TipjarOptions): string {
   return (
     `<a class="${escapeHtml(classes.join(' '))}" href="${escapeHtml(href)}"${target}` +
     ` data-position="${escapeHtml(position)}" data-compact="${escapeHtml(fold)}"${motion}${styleAttr(options.look)}>` +
-    `${ico}<span class="tipjar-label">${escapeHtml(label)}${sr}</span></a>`
+    `${ico}<span class="tipjar-label">${escapeHtml(label)}${countMarkup(options.count)}${sr}</span></a>`
   );
 }

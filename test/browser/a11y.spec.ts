@@ -41,6 +41,22 @@ test('the accessible name includes the visible label, folded or not', async ({ p
   await expect(page.getByRole('link', { name: 'Support this project on Ko-fi (opens in a new tab)' })).toBeVisible();
 });
 
+for (const colorScheme of ['light', 'dark'] as const) {
+  test(`a count passes axe and is read after the label, on a ${colorScheme} page`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    await open(page, {
+      buttons: [
+        { label: 'Star', icon: 'star', count: 1204, description: 'tipjar on GitHub' },
+        { label: 'Star', icon: 'star', count: 12_399, position: 'inline', compact: 'never' },
+        { label: 'Star', icon: 'star', count: 5, position: 'inline', compact: 'hover' },
+      ],
+    });
+    expect(await axe(page)).toEqual([]);
+    await expect(page.getByRole('link', { name: 'Star 1,204 tipjar on GitHub' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Star 12.3k' })).toBeVisible();
+  });
+}
+
 test('the compact target is at least 44px square', async ({ page }) => {
   await open(page, { buttons: [{ compact: 'always' }] });
   const box = await page.locator('.tipjar').boundingBox();

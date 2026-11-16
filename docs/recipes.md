@@ -5,7 +5,7 @@ Svelte 5, Astro 7, Next.js 16). Each one loads the stylesheet once, adds the but
 removes it again when its component goes away. Swap in your own link.
 
 - [React](#react) · [Vue](#vue) · [Svelte](#svelte) · [Astro](#astro) · [Next.js](#nextjs) · [Plain HTML](#plain-html-no-build-step)
-- [Strict CSP](#strict-csp)
+- [Star on GitHub, counted at build time](#star-on-github-counted-at-build-time) · [Strict CSP](#strict-csp)
 
 ## React
 
@@ -159,6 +159,33 @@ A CDN sees your visitors' IP addresses. To keep it all on your own site, copy
 `node_modules/tipjar/style.css` and `node_modules/tipjar/dist/` next to your pages and change the
 URLs to point at them.
 
+## Star on GitHub, counted at build time
+
+Ask GitHub for the star count while the site builds, so visitors never call GitHub themselves and no
+CSP change is needed. In Astro, frontmatter runs at build time:
+
+```astro
+---
+// src/components/StarButton.astro
+import { githubStars, tipjar } from 'tipjar';
+import 'tipjar/style.css';
+
+const stars = await githubStars('you/project', { token: import.meta.env.GITHUB_TOKEN });
+const button = tipjar({
+  href: 'https://github.com/you/project',
+  label: 'Star on GitHub',
+  icon: 'star',
+  count: stars,
+});
+---
+
+<Fragment set:html={button} />
+```
+
+The count is as fresh as the last build. The token is optional; it helps when a CI runner shares its
+address with other GitHub API users. If GitHub can't answer, `stars` is `undefined` and the button
+shows no count.
+
 ## Strict CSP
 
 tipjar works under `default-src 'self'` with no `unsafe-inline`:
@@ -167,6 +194,8 @@ tipjar works under `default-src 'self'` with no `unsafe-inline`:
 - Load your script from a file (`<script type="module" src>`), as above, not an inline `<script>`.
 - Theme with the `--tipjar-*` custom properties in your own stylesheet, and leave out `look`, which
   writes an inline `style` attribute that a strict CSP blocks.
+- Calling `githubStars()` in the browser needs `connect-src https://api.github.com`. Fetching the
+  count at build time, as above, needs nothing.
 
 ```css
 :root {

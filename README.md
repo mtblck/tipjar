@@ -1,6 +1,6 @@
 # tipjar
 
-A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link. It sits in a corner of the page, folds to just its icon on a phone, and can tuck itself away when your footer, with its own support link, scrolls into view.
+A small floating tip button for Ko-fi, Buy Me a Coffee, GitHub Sponsors or any link, or a "Star on GitHub" button with a live count. It sits in a corner of the page, folds to just its icon on a phone, and can tuck itself away when your footer, with its own support link, scrolls into view.
 
 - **Zero dependencies, about 13 kB gzipped** with the stylesheet. A function that returns an HTML string, one CSS file, and an optional `mount()` for the browser.
 - **Works under a strict CSP.** No inline scripts, and no inline styles unless you ask for them. Theme it with CSS custom properties.
@@ -49,6 +49,7 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `href` | (required) | http, https, mailto or a relative URL. Anything else throws, so the button can't run script. |
 | `label` | `"Support"` | The visible text. |
 | `description` | none | Extra words for screen readers, read after the label. |
+| `count` | none | A number after the label, such as a repo's stars from [`githubStars()`](#star-on-github). Numbers are shortened the way GitHub does (`1,204`, `12.3k`, `1.2M`); a string is shown as is. |
 | `icon` | `"heart"` | `heart`, `coffee`, `star`, `gift`, `sparkle`, `jar`, `coin`, `tea`, `pizza`, `music`; `false` for none; or `{ svg: '<svg…>' }` for your own. Custom SVG is inserted as is, so only pass markup you trust. |
 | `iconStyle` | `"flat"` | `flat`, `pixel` or `outline`. |
 | `position` | `"bottom-right"` | `bottom-left`, `top-right`, `top-left`, or `inline` to flow with the page. |
@@ -62,6 +63,28 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 | `className` | none | More classes for the link. |
 
 `mount()` also takes `target` (default `document.body`), `hideWhenVisible` and `nudgeAfter`. It returns `{ element, destroy }`.
+
+## Star on GitHub
+
+The same button can ask people to star your repo. `githubStars()` asks GitHub for the count and `count` shows it:
+
+```js
+import { githubStars, mount } from 'tipjar';
+import 'tipjar/style.css';
+
+mount({
+  href: 'https://github.com/you/project',
+  label: 'Star on GitHub',
+  icon: 'star',
+  count: await githubStars('you/project'),
+});
+```
+
+A button can't star the repo for the visitor: GitHub needs them signed in, so the link takes them to the repo and they click Star there. The icon is tipjar's own star, not GitHub's logo.
+
+`githubStars(repo, options)` takes `"owner/name"` or the repo's URL. If GitHub can't answer (no network, a rate limit, a missing repo) it resolves to `undefined` and the button simply shows no count, so it never breaks the page.
+
+Where you can, fetch the count once, at build time or on the server, and pass the number to `tipjar()`. Without a token GitHub allows each address 60 requests an hour, and a request from the browser needs `connect-src https://api.github.com` in a CSP. In the browser the count is kept in `sessionStorage` for an hour (`cacheFor`, in seconds), so one visitor asks once per visit. On a build server that shares its address, pass `token` (only there, never in the browser).
 
 ## Tuck it away
 
@@ -128,7 +151,7 @@ Set any of these on `.tipjar` or an ancestor, such as `:root`:
 }
 ```
 
-There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-border`, `--tipjar-shadow` and `--tipjar-focus`. For the motion options: `--tipjar-accent` (the colour of an icon's moving parts, such as steam or a coin; by default the icon's), `--tipjar-shine` (the `shine` highlight), `--tipjar-fill` (the `fill` colour, by default the fill mixed with a little of the label) and `--tipjar-enter-delay`.
+There are also `--tipjar-gap`, `--tipjar-pad`, `--tipjar-tracking`, `--tipjar-border`, `--tipjar-shadow` and `--tipjar-focus`. `--tipjar-count-bg` and `--tipjar-count-label` colour the count (by default a tint of the label colour, and the label colour). For the motion options: `--tipjar-accent` (the colour of an icon's moving parts, such as steam or a coin; by default the icon's), `--tipjar-shine` (the `shine` highlight), `--tipjar-fill` (the `fill` colour, by default the fill mixed with a little of the label) and `--tipjar-enter-delay`.
 
 ### Motion
 
@@ -167,9 +190,9 @@ In forced-colours mode (Windows High Contrast), where fills and shadows are remo
 
 From 1.0, tipjar follows [semver](https://semver.org): anything that could break a working button needs a major version. That covers:
 
-- **Exports:** `tipjar`, `mount`, `tuck`, `nudge`, `icon`, `ICON_NAMES`, `ICON_STYLES`, and the exported types.
+- **Exports:** `tipjar`, `mount`, `tuck`, `nudge`, `githubStars`, `icon`, `ICON_NAMES`, `ICON_STYLES`, and the exported types.
 - **Options:** their names, accepted values and defaults, including the fixed 600px `compact: 'auto'` breakpoint.
-- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label` and `.tipjar-sr` classes, and the `data-position`, `data-compact`, `data-hover`, `data-enter`, `data-animate`, `data-nudge` and `data-tucked` attributes, so your CSS can rely on them.
+- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label`, `.tipjar-count` and `.tipjar-sr` classes, and the `data-position`, `data-compact`, `data-hover`, `data-enter`, `data-animate`, `data-nudge` and `data-tucked` attributes, so your CSS can rely on them.
 - **Custom properties:** every `--tipjar-*` name in [Theme it](#theme-it).
 - **Icon drawings:** redrawing a built-in icon is a major version. Fixing a rendering bug in one, such as a stray pixel, is a patch, and both are noted in CHANGELOG.
 
