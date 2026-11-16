@@ -1,3 +1,4 @@
+import type { TipjarLink } from './menu.js';
 import { nudge } from './nudge.js';
 import { type TipjarOptions, tipjar } from './tipjar.js';
 import { type TuckTarget, tuck } from './tuck.js';
@@ -20,9 +21,9 @@ export interface MountOptions extends TipjarOptions {
 }
 
 /** What {@link mount} returns. */
-export interface Mounted {
-  /** The button. */
-  element: HTMLAnchorElement;
+export interface Mounted<E extends HTMLElement = HTMLAnchorElement> {
+  /** The button: a link, or with `links` a button that opens them. */
+  element: E;
   /** Removes the button and stops watching. */
   destroy: () => void;
 }
@@ -32,13 +33,19 @@ export interface Mounted {
  * @param options - The button's options, its target and what to tuck it under.
  * @returns The button and a way to remove it.
  */
-export function mount(options: MountOptions): Mounted {
+export function mount(options: MountOptions & { links: readonly TipjarLink[] }): Mounted<HTMLButtonElement>;
+export function mount(options: MountOptions): Mounted;
+export function mount(options: MountOptions): Mounted<HTMLAnchorElement | HTMLButtonElement> {
   const { target, hideWhenVisible, nudgeAfter, ...rest } = options;
   const host = target ?? document.body;
   const holder = document.createElement('template');
   holder.innerHTML = tipjar(rest);
-  const element = holder.content.firstElementChild as HTMLAnchorElement;
-  host.append(element);
+  // A menu comes in a wrapper holding the button and its list.
+  const root = holder.content.firstElementChild as HTMLElement;
+  const element = (root.matches('.tipjar') ? root : root.querySelector('.tipjar')) as
+    | HTMLAnchorElement
+    | HTMLButtonElement;
+  host.append(root);
   const untuck = hideWhenVisible === undefined ? undefined : tuck(element, hideWhenVisible);
   const unnudge = nudgeAfter === undefined ? undefined : nudge(element, nudgeAfter);
 
@@ -47,7 +54,7 @@ export function mount(options: MountOptions): Mounted {
     destroy: () => {
       untuck?.();
       unnudge?.();
-      element.remove();
+      root.remove();
     },
   };
 }

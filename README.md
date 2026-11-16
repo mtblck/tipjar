@@ -46,7 +46,9 @@ Copy `node_modules/tipjar/style.css` next to your other stylesheets if you don't
 
 | Option | Default | |
 | --- | --- | --- |
-| `href` | (required) | http, https, mailto or a relative URL. Anything else throws, so the button can't run script. |
+| `href` | (required) | http, https, mailto or a relative URL. Anything else throws, so the button can't run script. Not needed with `links`. |
+| `links` | none | Ways to support, in a [menu](#a-menu-of-ways-to-support) the button opens: a list of `{ href, label, icon?, description?, count? }`. |
+| `menuId` | `tipjar-menu-N` | With `links`, the list's id. Set it if more than one process renders buttons for the same page. |
 | `label` | `"Support"` | The visible text. |
 | `description` | none | Extra words for screen readers, read after the label. |
 | `count` | none | A number after the label, such as a repo's stars from [`githubStars()`](#star-on-github). Numbers are shortened the way GitHub does (`1,204`, `12.3k`, `1.2M`); a string is shown as is. |
@@ -85,6 +87,28 @@ A button can't star the repo for the visitor: GitHub needs them signed in, so th
 `githubStars(repo, options)` takes `"owner/name"` or the repo's URL. If GitHub can't answer (no network, a rate limit, a missing repo) it resolves to `undefined` and the button simply shows no count, so it never breaks the page.
 
 Where you can, fetch the count once, at build time or on the server, and pass the number to `tipjar()`. Without a token GitHub allows each address 60 requests an hour, and a request from the browser needs `connect-src https://api.github.com` in a CSP. In the browser the count is kept in `sessionStorage` for an hour (`cacheFor`, in seconds), so one visitor asks once per visit. On a build server that shares its address, pass `token` (only there, never in the browser). Fetching at build time is also the private choice: a request from the browser tells GitHub each visitor's IP address, much as a CDN would.
+
+## A menu of ways to support
+
+Give `links` instead of `href`, and the button opens a list of them. It rises above a button in a bottom corner and drops below one in a top corner, lined up with its edge.
+
+```js
+mount({
+  label: 'Support',
+  icon: 'jar',
+  links: [
+    { href: 'https://ko-fi.com/you', label: 'Buy me a coffee', icon: 'coffee' },
+    { href: 'https://github.com/sponsors/you', label: 'GitHub Sponsors', icon: 'heart' },
+    { href: 'https://github.com/you/project', label: 'Star on GitHub', icon: 'star', count: await githubStars('you/project') },
+  ],
+});
+```
+
+![An open menu above a Support button: Buy me a coffee, GitHub Sponsors, and Star on GitHub with a count of 1,204](docs/images/menu-light.png)
+
+The list is the browser's own [popover](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API), so there is no script in it: it works under a strict CSP and in markup rendered on the server, and the browser handles Escape, a click outside, focus and telling screen readers it's open. Each link takes the button's `iconStyle` and `newTab`, and plays its icon on hover. A list under an `inline` button opens below it, or above when there's no room, in browsers with CSS anchor positioning; others open it in the middle of the screen.
+
+The list sits in the browser's top layer, outside the button, so set `--tipjar-*` properties on an ancestor such as `:root` or `.tipjar-menu`, not on `.tipjar`. `--tipjar-menu-radius` and `--tipjar-menu-gap` (the space between button and list) shape it.
 
 ## Tuck it away
 
@@ -192,7 +216,7 @@ From 1.0, tipjar follows [semver](https://semver.org): anything that could break
 
 - **Exports:** `tipjar`, `mount`, `tuck`, `nudge`, `githubStars`, `icon`, `ICON_NAMES`, `ICON_STYLES`, and the exported types.
 - **Options:** their names, accepted values and defaults, including the fixed 600px `compact: 'auto'` breakpoint.
-- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label`, `.tipjar-count` and `.tipjar-sr` classes, and the `data-position`, `data-compact`, `data-hover`, `data-enter`, `data-animate`, `data-nudge` and `data-tucked` attributes, so your CSS can rely on them.
+- **Markup:** the `.tipjar`, `.tipjar-icon`, `.tipjar-label`, `.tipjar-count`, `.tipjar-sr`, `.tipjar-menu`, `.tipjar-list` and `.tipjar-item` classes, and the `data-position`, `data-compact`, `data-hover`, `data-enter`, `data-animate`, `data-nudge` and `data-tucked` attributes, so your CSS can rely on them.
 - **Custom properties:** every `--tipjar-*` name in [Theme it](#theme-it).
 - **Icon drawings:** redrawing a built-in icon is a major version. Fixing a rendering bug in one, such as a stray pixel, is a patch, and both are noted in CHANGELOG.
 
