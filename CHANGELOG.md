@@ -4,6 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-11-16
+
 ### Added
 
 - `githubStars(repo, { min })`: below `min` stars it resolves to `undefined`, so the button shows no count until the repo has that many.
@@ -57,7 +59,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 - First version: `tipjar()`, `mount()`, `icon()`, `style.css`, and five icons (heart, coffee, star, gift, sparkle) drawn flat, pixel and outline.
 
-[Unreleased]: https://github.com/mtblck/tipjar/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/mtblck/tipjar/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/mtblck/tipjar/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/mtblck/tipjar/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/mtblck/tipjar/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/mtblck/tipjar/compare/v1.1.0...v1.2.0
