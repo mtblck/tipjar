@@ -9,7 +9,13 @@ export interface TipjarLink {
   /** The visible text, such as "Buy me a coffee". */
   label: string;
   /** A built-in icon, `false` for none, or `{ svg }` with your own trusted SVG markup. Defaults to none. */
-  icon?: IconName | false | { svg: string };
+  icon?:
+    | IconName
+    | false
+    | {
+        /** Your own SVG markup, inserted as is: pass only markup you trust. */
+        svg: string;
+      };
   /** Extra words for screen readers, read after the label. */
   description?: string;
   /** A number after the label, such as stars from `githubStars()`. */
