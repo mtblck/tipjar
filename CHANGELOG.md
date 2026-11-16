@@ -4,6 +4,10 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+### Added
+
+- `githubStars(repo, { min })`: below `min` stars it resolves to `undefined`, so the button shows no count until the repo has that many.
+
 ## [2.1.0] - 2026-11-16
 
 - `links` turns the button into a menu of ways to support: it opens a list above a bottom-corner button or below a top-corner one, using the browser's popover, so it needs no script. Each link takes an icon, a description and a `count`. `href` is no longer needed when there are `links`, and `mount()` then returns the `<button>`.

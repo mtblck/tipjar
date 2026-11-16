@@ -60,6 +60,16 @@ describe('githubStars', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('shows no count below min, and keeps the real count cached', async () => {
+    fetchMock.mockImplementation(async () => reply({ stargazers_count: 0 }));
+    await expect(githubStars('mtblck/tipjar', { min: 1 })).resolves.toBeUndefined();
+    await expect(githubStars('mtblck/tipjar')).resolves.toBe(0);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    fetchMock.mockImplementation(async () => reply({ stargazers_count: 25 }));
+    await expect(githubStars('mtblck/tipjar', { min: 25, cacheFor: 0 })).resolves.toBe(25);
+    await expect(githubStars('mtblck/tipjar', { min: 26, cacheFor: 0 })).resolves.toBeUndefined();
+  });
+
   it('keeps the count for an hour, then asks again', async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     await githubStars('mtblck/tipjar');
