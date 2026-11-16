@@ -1,6 +1,7 @@
 import { countMarkup } from './count.js';
 import { escapeHtml, safeCss, safeHref } from './escape.js';
 import { icon as drawIcon, type IconName, type IconStyle } from './icons.js';
+import { menuId, menuMarkup, type TipjarLink } from './menu.js';
 
 /** Where the button sits: a corner of the screen, or `inline` to flow with the page. */
 export type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'inline';
@@ -38,8 +39,15 @@ export interface TipjarLook {
 
 /** Options for {@link tipjar}. */
 export interface TipjarOptions {
-  /** Where the button goes: your Ko-fi, Buy Me a Coffee, GitHub Sponsors or any page. */
-  href: string;
+  /** Where the button goes: your Ko-fi, Buy Me a Coffee, GitHub Sponsors or any page. Needed unless there are `links`. */
+  href?: string;
+  /**
+   * Ways to support, shown in a list the button opens, above a bottom-corner button and below a
+   * top-corner one. With `links`, the button opens the list instead of following `href`.
+   */
+  links?: readonly TipjarLink[];
+  /** With `links`, the list's id. Defaults to a fresh `tipjar-menu-N`; set it when you render on several servers. */
+  menuId?: string;
   /** The visible text. Defaults to "Support". */
   label?: string;
   /** Extra words for screen readers, read after the label, such as "this project on Ko-fi". */
@@ -121,13 +129,12 @@ function styleAttr(look: TipjarLook | undefined): string {
 }
 
 /**
- * Builds the tip button as an HTML string: an `<a class="tipjar">` with an icon and a label.
- * Pair it with `tipjar/style.css`. The output has no script and, without `look`, no inline styles.
+ * Builds the tip button as an HTML string: an `<a class="tipjar">` with an icon and a label, or,
+ * with `links`, a `<button class="tipjar">` that opens a list of them. Pair it with `tipjar/style.css`. The output has no script and, without `look`, no inline styles.
  * @param options - Link, label, icon and placement.
  * @returns The button's HTML.
  */
 export function tipjar(options: TipjarOptions): string {
-  const href = safeHref(options.href);
   const label = options.label ?? 'Support';
   const position = oneOf('position', options.position ?? 'bottom-right', POSITIONS);
   const compact = oneOf('compact', options.compact ?? 'auto', COMPACTS);
@@ -147,9 +154,25 @@ export function tipjar(options: TipjarOptions): string {
     (hover === 'lift' ? '' : ` data-hover="${hover}"`) +
     (enter === 'none' ? '' : ` data-enter="${enter}"`) +
     (animate === 'hover' ? '' : ` data-animate="${animate}"`);
-  return (
-    `<a class="${escapeHtml(classes.join(' '))}" href="${escapeHtml(href)}"${target}` +
-    ` data-position="${escapeHtml(position)}" data-compact="${escapeHtml(fold)}"${motion}${styleAttr(options.look)}>` +
-    `${ico}<span class="tipjar-label">${escapeHtml(label)}${countMarkup(options.count)}${sr}</span></a>`
-  );
+  const cls = ` class="${escapeHtml(classes.join(' '))}"`;
+  const attrs = ` data-position="${escapeHtml(position)}" data-compact="${escapeHtml(fold)}"${motion}${styleAttr(options.look)}`;
+  const text = `${ico}<span class="tipjar-label">${escapeHtml(label)}${countMarkup(options.count)}`;
+  if (!options.links) {
+    const href = escapeHtml(safeHref(options.href ?? ''));
+    return `<a${cls} href="${href}"${target}${attrs}>${text}${sr}</span></a>`;
+  }
+  // The button only opens the list, so it reads its description but not the new-tab hint: that
+  // goes on each link.
+  const own = options.description ? `<span class="tipjar-sr"> ${escapeHtml(options.description)}</span>` : '';
+  return menuMarkup(options.links, {
+    attrs: `${cls}${attrs}`,
+    inner: `${text}${own}</span>`,
+    id: options.menuId ?? menuId(),
+    position,
+    listAttrs: animate === 'hover' ? '' : ` data-animate="${animate}"`,
+    target,
+    hint,
+    drawIcon: iconMarkup,
+    iconStyle: options.iconStyle ?? 'flat',
+  });
 }

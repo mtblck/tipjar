@@ -5,7 +5,7 @@ Svelte 5, Astro 7, Next.js 16). Each one loads the stylesheet once, adds the but
 removes it again when its component goes away. Swap in your own link.
 
 - [React](#react) · [Vue](#vue) · [Svelte](#svelte) · [Astro](#astro) · [Next.js](#nextjs) · [Plain HTML](#plain-html-no-build-step)
-- [Star on GitHub, counted at build time](#star-on-github-counted-at-build-time) · [Strict CSP](#strict-csp)
+- [Star on GitHub, counted at build time](#star-on-github-counted-at-build-time) · [The GitHub logo](#the-github-logo) · [Strict CSP](#strict-csp)
 
 ## React
 
@@ -185,6 +185,29 @@ const button = tipjar({
 The count is as fresh as the last build. The token is optional; it helps when a CI runner shares its
 address with other GitHub API users. If GitHub can't answer, `stars` is `undefined` and the button
 shows no count.
+
+## The GitHub logo
+
+tipjar's built-in icons are its own drawings, so it ships no brand logos. For a "Star on GitHub" button
+you can pass GitHub's mark yourself as a custom icon. This is `mark-github` from GitHub's
+[Octicons](https://primer.style/octicons/) (MIT), drawn in `currentColor` so it themes like the rest:
+
+```js
+const githubMark =
+  '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true">' +
+  '<path d="M6.766 11.328c-2.063-.25-3.516-1.734-3.516-3.656 0-.781.281-1.625.75-2.188-.203-.515-.172-1.609.063-2.062.625-.078 1.468.25 1.968.703.594-.187 1.219-.281 1.985-.281.765 0 1.39.094 1.953.265.484-.437 1.344-.765 1.969-.687.218.422.25 1.515.046 2.047.5.593.766 1.39.766 2.203 0 1.922-1.453 3.375-3.547 3.64.531.344.89 1.094.89 1.954v1.625c0 .468.391.734.86.547C13.781 14.359 16 11.53 16 8.03 16 3.61 12.406 0 7.984 0 3.563 0 0 3.61 0 8.031a7.88 7.88 0 0 0 5.172 7.422c.422.156.828-.125.828-.547v-1.25c-.219.094-.5.156-.75.156-1.031 0-1.64-.562-2.078-1.609-.172-.422-.36-.672-.719-.719-.187-.015-.25-.093-.25-.187 0-.188.313-.328.625-.328.453 0 .844.281 1.25.86.313.452.64.655 1.031.655s.641-.14 1-.5c.266-.265.47-.5.657-.656"/></svg>';
+
+mount({
+  href: 'https://github.com/you/project',
+  label: 'Star on GitHub',
+  icon: { svg: githubMark },
+  count: await githubStars('you/project'),
+});
+```
+
+It works the same for a link in a menu: `{ href, label, icon: { svg: githubMark } }`. The mark is
+GitHub's trademark, so check [GitHub's logo guidelines](https://github.com/logos) before you change
+its shape or colour. A custom icon doesn't move on hover the way the built-in ones do.
 
 ## Strict CSP
 

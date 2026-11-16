@@ -32,6 +32,12 @@
     visibility 0.2s;
   -webkit-tap-highlight-color: transparent;
 }
+/* The menu's list has the button's colours. */
+.tipjar-list {
+  --_bg: var(--tipjar-bg, #1f1d2b);
+  --_label: var(--tipjar-label, #ffffff);
+  --_ring: var(--tipjar-ring, #ffffff);
+}
 /* A small squish while pressed, on every device, so a tap on a phone feels like a press. */
 .tipjar:active {
   scale: 0.96;
@@ -48,7 +54,8 @@
 }
 /* On a dark page: a light button with a dark ring. Only the fallbacks change. */
 @media (prefers-color-scheme: dark) {
-  .tipjar {
+  .tipjar,
+  .tipjar-list {
     --_bg: var(--tipjar-bg, #f4f1ea);
     --_label: var(--tipjar-label, #1f1d2b);
     --_ring: var(--tipjar-ring, #15141c);
@@ -110,6 +117,108 @@ svg.tipjar-icon,
   font-variant-numeric: tabular-nums;
   color: var(--tipjar-count-label, inherit);
   background: var(--tipjar-count-bg, color-mix(in srgb, currentColor 18%, transparent));
+}
+/* The menu (with the links option): a button that opens a list of ways to support, through the
+   browser's popover. The wrapper adds no box, so the button sits in its corner as usual. */
+.tipjar-menu {
+  display: contents;
+}
+.tipjar-list {
+  --_gap: calc(var(--tipjar-size, 44px) + var(--tipjar-menu-gap, 8px));
+  position: fixed;
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: calc(100vw - 2 * var(--tipjar-offset, 16px));
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  font-family: var(--tipjar-font, inherit);
+  font-size: var(--tipjar-font-size, 0.875rem);
+  font-weight: var(--tipjar-weight, 600);
+  line-height: 1;
+  letter-spacing: var(--tipjar-tracking, 0.01em);
+  color: var(--_label);
+  background: var(--_bg);
+  border: var(--tipjar-border, 0);
+  border-radius: var(--tipjar-menu-radius, 16px);
+  box-shadow: var(--tipjar-shadow, 0 0 0 2px var(--_ring), 0 8px 18px -8px rgb(0 0 0 / 0.5));
+  transition:
+    opacity 0.15s,
+    translate 0.15s,
+    display 0.15s allow-discrete,
+    overlay 0.15s allow-discrete;
+}
+/* It rises from a bottom-corner button and drops from a top-corner one, lined up with its edge. */
+.tipjar-list[data-position="bottom-right"],
+.tipjar-list[data-position="bottom-left"] {
+  inset: auto;
+  bottom: calc(max(var(--tipjar-offset, 16px), env(safe-area-inset-bottom, 0px)) + var(--_gap));
+}
+.tipjar-list[data-position="top-right"],
+.tipjar-list[data-position="top-left"] {
+  inset: auto;
+  top: calc(max(var(--tipjar-offset, 16px), env(safe-area-inset-top, 0px)) + var(--_gap));
+}
+.tipjar-list[data-position$="right"] {
+  right: max(var(--tipjar-offset, 16px), env(safe-area-inset-right, 0px));
+}
+.tipjar-list[data-position$="left"] {
+  left: max(var(--tipjar-offset, 16px), env(safe-area-inset-left, 0px));
+}
+/* An inline button's list opens below it, or above when there is no room, where the browser can
+   anchor it; elsewhere it opens in the middle of the screen. */
+@supports (position-area: bottom) {
+  .tipjar-list[data-position="inline"] {
+    inset: auto;
+    margin: var(--tipjar-menu-gap, 8px) 0;
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block;
+  }
+}
+.tipjar-list:not(:popover-open) {
+  opacity: 0;
+  translate: 0 6px;
+}
+@starting-style {
+  .tipjar-list:popover-open {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+.tipjar-list[data-position^="top"]:not(:popover-open) {
+  translate: 0 -6px;
+}
+@starting-style {
+  .tipjar-list[data-position^="top"]:popover-open {
+    translate: 0 -6px;
+  }
+}
+.tipjar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--tipjar-gap, 8px);
+  min-height: var(--tipjar-size, 44px);
+  padding: 0 12px;
+  border-radius: calc(var(--tipjar-menu-radius, 16px) - 6px);
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tipjar-item:hover,
+.tipjar-item:focus-visible {
+  color: inherit;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+.tipjar-item:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+.tipjar-item .tipjar-count {
+  margin-inline-start: auto;
+}
+/* A tucked button's list closes with it. */
+.tipjar[data-tucked] + .tipjar-list {
+  display: none;
 }
 /* Tucked away (by mount's hideWhenVisible): hidden, and out of the tab order. */
 .tipjar[data-tucked] {
@@ -470,6 +579,15 @@ svg.tipjar-icon,
 .tipjar[data-nudge]:not([data-animate="none"]) .tipjar-part {
   animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) 1;
 }
+/* A menu's links play their icon's part on hover and keyboard focus, like the button. */
+.tipjar-list:not([data-animate="none"]) .tipjar-item:focus-visible .tipjar-part {
+  animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) infinite;
+}
+@media (hover: hover) {
+  .tipjar-list:not([data-animate="none"]) .tipjar-item:hover .tipjar-part {
+    animation: var(--_part) var(--_part-ease, ease-in-out) var(--_part-wait, 0s) infinite;
+  }
+}
 @keyframes tipjar-nudge {
   20% {
     rotate: -6deg;
@@ -739,13 +857,16 @@ svg.tipjar-icon,
 @media (prefers-reduced-motion: reduce) {
   .tipjar,
   .tipjar *,
-  .tipjar::before {
+  .tipjar::before,
+  .tipjar-list,
+  .tipjar-list * {
     transition-duration: 0s !important;
     transition-delay: 0s !important;
     animation: none !important;
   }
   .tipjar,
-  .tipjar .tipjar-label {
+  .tipjar .tipjar-label,
+  .tipjar-list {
     transform: none !important;
     translate: none !important;
     scale: none !important;
@@ -764,6 +885,15 @@ svg.tipjar-icon,
   .tipjar-count {
     border: 1px solid LinkText;
   }
+  .tipjar-list {
+    border: 2px solid CanvasText;
+  }
+  .tipjar-item {
+    color: LinkText;
+  }
+  .tipjar-item:focus-visible {
+    outline-color: Highlight;
+  }
   .tipjar:focus-visible {
     outline-color: Highlight;
   }
@@ -772,7 +902,8 @@ svg.tipjar-icon,
   }
 }
 @media print {
-  .tipjar {
+  .tipjar,
+  .tipjar-list {
     display: none;
   }
 }

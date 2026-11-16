@@ -16,6 +16,15 @@ describe('mount', () => {
     expect(document.querySelector('.tipjar')).toBeNull();
   });
 
+  it('mounts a menu, returning its button, and removes the list with it', () => {
+    const { element, destroy } = mount({ links: [{ href: '/', label: 'Ko-fi' }] });
+    expect(element.tagName).toBe('BUTTON');
+    expect(element.type).toBe('button');
+    expect(document.querySelector('.tipjar-menu > .tipjar-list')).not.toBeNull();
+    destroy();
+    expect(document.body.innerHTML).toBe('');
+  });
+
   it('appends to a target', () => {
     const box = document.createElement('div');
     document.body.append(box);

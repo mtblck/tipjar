@@ -4,6 +4,8 @@ All notable changes to tipjar. Changing a built-in icon's drawing is listed here
 
 ## [Unreleased]
 
+- `links` turns the button into a menu of ways to support: it opens a list above a bottom-corner button or below a top-corner one, using the browser's popover, so it needs no script. Each link takes an icon, a description and a `count`. `href` is no longer needed when there are `links`, and `mount()` then returns the `<button>`.
+
 - A `count` option shows a number after the label, in a small pill: numbers are shortened the way GitHub does (`1,204`, `12.3k`, `1.2M`), and a string is shown as is. `--tipjar-count-bg` and `--tipjar-count-label` colour it.
 - `githubStars('owner/name')` asks GitHub how many stars a repo has, for a "Star on GitHub" button. It caches the count in `sessionStorage` for an hour, takes a `token` for build servers, and resolves to `undefined` instead of throwing when GitHub can't answer.
 
