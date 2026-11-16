@@ -12,6 +12,11 @@ export interface GithubStarsOptions {
   token?: string;
   /** Cancels the request. */
   signal?: AbortSignal;
+  /**
+   * The fewest stars worth showing. Below it, `githubStars()` resolves to `undefined` and the
+   * button shows no count, so a new repo doesn't advertise a 0. Defaults to 0, which shows any count.
+   */
+  min?: number;
 }
 
 const REPO = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})\/[A-Za-z0-9._-]{1,100}$/;
@@ -61,11 +66,15 @@ function remember(key: string, stars: number): void {
  * allows 60 requests an hour per address without a token. In the browser it needs
  * `connect-src https://api.github.com` under a CSP.
  * @param repo - `"owner/name"`, or the repo's github.com URL.
- * @param options - How long to cache the count, a token, and a signal.
- * @returns The number of stars, or `undefined` if GitHub couldn't say.
+ * @param options - How long to cache the count, a token, a signal, and the fewest stars to show.
+ * @returns The number of stars, or `undefined` if GitHub couldn't say or there are fewer than `min`.
  */
 export async function githubStars(repo: string, options: GithubStarsOptions = {}): Promise<number | undefined> {
-  const path = repoPath(repo);
+  const stars = await fetchStars(repoPath(repo), options);
+  return stars !== undefined && stars >= (options.min ?? 0) ? stars : undefined;
+}
+
+async function fetchStars(path: string, options: GithubStarsOptions): Promise<number | undefined> {
   const key = `tipjar:stars:${path.toLowerCase()}`;
   const maxAge = options.cacheFor ?? 3600;
   const hit = maxAge > 0 ? cached(key, maxAge) : undefined;
