@@ -101,6 +101,16 @@ svg.tipjar-icon,
   clip-path: inset(50%);
   white-space: nowrap;
 }
+/* A count after the label, such as a repo's stars: a small pill in a tint of the label's colour. */
+.tipjar-count {
+  display: inline-block;
+  margin-inline-start: 2px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+  color: var(--tipjar-count-label, inherit);
+  background: var(--tipjar-count-bg, color-mix(in srgb, currentColor 18%, transparent));
+}
 /* Tucked away (by mount's hideWhenVisible): hidden, and out of the tab order. */
 .tipjar[data-tucked] {
   opacity: 0;
@@ -750,6 +760,9 @@ svg.tipjar-icon,
   }
   .tipjar-icon {
     color: LinkText;
+  }
+  .tipjar-count {
+    border: 1px solid LinkText;
   }
   .tipjar:focus-visible {
     outline-color: Highlight;
