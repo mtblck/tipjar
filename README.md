@@ -84,7 +84,7 @@ A button can't star the repo for the visitor: GitHub needs them signed in, so th
 
 `githubStars(repo, options)` takes `"owner/name"` or the repo's URL. If GitHub can't answer (no network, a rate limit, a missing repo) it resolves to `undefined` and the button simply shows no count, so it never breaks the page.
 
-Where you can, fetch the count once, at build time or on the server, and pass the number to `tipjar()`. Without a token GitHub allows each address 60 requests an hour, and a request from the browser needs `connect-src https://api.github.com` in a CSP. In the browser the count is kept in `sessionStorage` for an hour (`cacheFor`, in seconds), so one visitor asks once per visit. On a build server that shares its address, pass `token` (only there, never in the browser).
+Where you can, fetch the count once, at build time or on the server, and pass the number to `tipjar()`. Without a token GitHub allows each address 60 requests an hour, and a request from the browser needs `connect-src https://api.github.com` in a CSP. In the browser the count is kept in `sessionStorage` for an hour (`cacheFor`, in seconds), so one visitor asks once per visit. On a build server that shares its address, pass `token` (only there, never in the browser). Fetching at build time is also the private choice: a request from the browser tells GitHub each visitor's IP address, much as a CDN would.
 
 ## Tuck it away
 
